@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active: ${PROFILE:dev}
+  jackson:
+    default-property-inclusion: NON_NULL
+    property-naming-strategy: SNAKE_CASE
+  jpa:
+    open-in-view: false
+
+---
+
+spring:
+  profiles: dev
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/smartcookbook?useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username: root
+    password: password
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
