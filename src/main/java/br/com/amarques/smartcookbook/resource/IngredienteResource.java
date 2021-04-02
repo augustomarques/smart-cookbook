@@ -70,7 +70,7 @@ public class IngredienteResource {
         return ResponseEntity.ok().body(ingredientes);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "Remove o Ingrediente de uma Receita")
     public ResponseEntity<Void> delete(@PathVariable Long receitaId, @PathVariable Long id) {
         logger.info("REST request do delete a Ingrediente [id: {0}] from Receita [id: {1}]", id, receitaId);
