@@ -1,6 +1,7 @@
 package br.com.amarques.smartcookbook.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ingredientes")
@@ -43,5 +44,18 @@ public class Ingrediente {
 
     public Receita getReceita() {
         return receita;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ingrediente that = (Ingrediente) o;
+        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(receita, that.receita);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, receita);
     }
 }

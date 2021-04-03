@@ -40,7 +40,7 @@ public class ReceitaService {
 
     protected Receita findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(MessageFormat.format(
-                "Empresa [id: {0}] not found", id)));
+                "Receita [id: {0}] not found", id)));
     }
 
     @Transactional
