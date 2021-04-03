@@ -9,7 +9,7 @@ public class CreateUpdateReceitaDTO {
     @NotEmpty(message = "O Modo de Preparo é obrigatório")
     public final String modoPreparo;
 
-    public CreateUpdateReceitaDTO() {
+    protected CreateUpdateReceitaDTO() {
         this.nome = null;
         this.modoPreparo = null;
     }

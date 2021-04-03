@@ -7,7 +7,7 @@ public class CreateUpdateIngredienteDTO {
     @NotEmpty(message = "O Nome é obrigatório")
     public final String nome;
 
-    public CreateUpdateIngredienteDTO(){
+    protected CreateUpdateIngredienteDTO(){
         this.nome = null;
     }
 
