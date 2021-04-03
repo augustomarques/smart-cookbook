@@ -10,9 +10,8 @@ public class IngredienteMapper {
     private IngredienteMapper() {}
 
     public static Ingrediente toEntity(CreateUpdateIngredienteDTO dto, Receita receita) {
-        Ingrediente ingrediente = new Ingrediente();
+        Ingrediente ingrediente = new Ingrediente(receita);
         ingrediente.setNome(dto.nome);
-        ingrediente.setReceita(receita);
         return ingrediente;
     }
 

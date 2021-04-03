@@ -18,7 +18,12 @@ public class Ingrediente {
     @JoinColumn(name = "receita_id")
     private Receita receita;
 
-    public Ingrediente(){}
+    protected Ingrediente() {}
+
+    public Ingrediente(Receita receita){
+        this();
+        this.receita = receita;
+    }
 
     public Long getId() {
         return id;
@@ -38,9 +43,5 @@ public class Ingrediente {
 
     public Receita getReceita() {
         return receita;
-    }
-
-    public void setReceita(Receita receita) {
-        this.receita = receita;
     }
 }
