@@ -6,6 +6,7 @@ import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredienteDTO
 import br.com.amarques.smartcookbook.service.IngredienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,18 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RequiredArgsConstructor
 @Api(value = "Ingredientes")
+@RestController
 @RequestMapping("/receitas/{receitaId}/ingredientes")
 public class IngredienteResource {
 
     private final Logger logger = LoggerFactory.getLogger(IngredienteResource.class);
 
     private final IngredienteService service;
-
-    public IngredienteResource(final IngredienteService service) {
-        this.service = service;
-    }
 
     @PostMapping
     @ApiOperation(value = "Cadastra um novo Ingrediente em uma Receita")

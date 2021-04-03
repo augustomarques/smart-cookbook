@@ -6,6 +6,7 @@ import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
 import br.com.amarques.smartcookbook.service.ReceitaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,18 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RequiredArgsConstructor
 @Api(value = "Receitas")
+@RestController
 @RequestMapping("/receitas")
 public class ReceitaResource {
 
     private final Logger logger = LoggerFactory.getLogger(ReceitaResource.class);
 
     private final ReceitaService service;
-
-    public ReceitaResource(final ReceitaService service) {
-        this.service = service;
-    }
 
     @PostMapping
     @ApiOperation(value = "Cadastra uma nova Receita")

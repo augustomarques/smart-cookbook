@@ -7,6 +7,7 @@ import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.ReceitaMapper;
 import br.com.amarques.smartcookbook.repository.ReceitaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -17,13 +18,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ReceitaService {
 
     private final ReceitaRepository repository;
-
-    public ReceitaService(final ReceitaRepository repository) {
-        this.repository = repository;
-    }
 
     @Transactional
     public SimpleEntityDTO create(CreateUpdateReceitaDTO receitaDTO) {

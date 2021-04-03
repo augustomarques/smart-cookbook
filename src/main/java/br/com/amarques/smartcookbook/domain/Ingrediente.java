@@ -1,8 +1,12 @@
 package br.com.amarques.smartcookbook.domain;
 
-import javax.persistence.*;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import javax.persistence.*;
+
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "ingredientes")
 public class Ingrediente {
@@ -17,12 +21,13 @@ public class Ingrediente {
 
     @OneToOne
     @JoinColumn(name = "receita_id")
-    private Receita receita;
+    private final Receita receita;
 
-    protected Ingrediente() {}
+    protected Ingrediente() {
+        this.receita = null;
+    }
 
     public Ingrediente(Receita receita){
-        this();
         this.receita = receita;
     }
 
@@ -46,16 +51,4 @@ public class Ingrediente {
         return receita;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ingrediente that = (Ingrediente) o;
-        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(receita, that.receita);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome, receita);
-    }
 }

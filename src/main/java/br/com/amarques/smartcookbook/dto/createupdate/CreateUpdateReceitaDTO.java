@@ -1,7 +1,13 @@
 package br.com.amarques.smartcookbook.dto.createupdate;
 
+import lombok.*;
+
 import javax.validation.constraints.NotEmpty;
 
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class CreateUpdateReceitaDTO {
 
     @NotEmpty(message = "O Nome é obrigatório")
@@ -9,13 +15,4 @@ public class CreateUpdateReceitaDTO {
     @NotEmpty(message = "O Modo de Preparo é obrigatório")
     public final String modoPreparo;
 
-    protected CreateUpdateReceitaDTO() {
-        this.nome = null;
-        this.modoPreparo = null;
-    }
-
-    public CreateUpdateReceitaDTO(final String nome, final String modoPreparo) {
-        this.nome = nome;
-        this.modoPreparo = modoPreparo;
-    }
 }

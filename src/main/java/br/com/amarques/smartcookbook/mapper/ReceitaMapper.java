@@ -3,10 +3,11 @@ package br.com.amarques.smartcookbook.mapper;
 import br.com.amarques.smartcookbook.domain.Receita;
 import br.com.amarques.smartcookbook.dto.ReceitaDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReceitaMapper {
-
-    private ReceitaMapper() {}
 
     public static Receita toEntity(CreateUpdateReceitaDTO dto) {
         Receita receita = new Receita();
