@@ -6,6 +6,7 @@ import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.ReceitaMapper;
+import br.com.amarques.smartcookbook.repository.IngredienteRepository;
 import br.com.amarques.smartcookbook.repository.ReceitaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class ReceitaService {
 
     private final ReceitaRepository repository;
+    private final IngredienteRepository ingredienteRepository;
 
     @Transactional
     public SimpleEntityDTO create(CreateUpdateReceitaDTO receitaDTO) {
@@ -58,5 +60,11 @@ public class ReceitaService {
         }
 
         return receitas.stream().map(ReceitaMapper::toDTO).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        ingredienteRepository.deleteByReceitaId(id);
+        repository.deleteById(id);
     }
 }

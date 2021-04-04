@@ -65,4 +65,13 @@ public class ReceitaResource {
 
         return ResponseEntity.ok().body(receitas);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        logger.info("REST request to delete an Receita [id: {}] and all Ingredientes", id);
+
+        service.delete(id);
+
+        return ResponseEntity.ok().build();
+    }
 }

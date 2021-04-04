@@ -19,8 +19,8 @@ public class Ingrediente {
     @Column(name = "nome")
     private String nome;
 
-    @OneToOne
-    @JoinColumn(name = "receita_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "receita_id", updatable = false)
     private final Receita receita;
 
     protected Ingrediente() {

@@ -4,6 +4,7 @@ import br.com.amarques.smartcookbook.domain.Receita;
 import br.com.amarques.smartcookbook.dto.ReceitaDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
+import br.com.amarques.smartcookbook.repository.IngredienteRepository;
 import br.com.amarques.smartcookbook.repository.ReceitaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,11 +28,14 @@ public class ReceitaServiceTest {
     @Mock
     private ReceitaRepository receitaRepository;
 
+    @Mock
+    private IngredienteRepository ingredienteRepository;
+
     private ReceitaService receitaService;
 
     @BeforeEach
     public void before() {
-        this.receitaService = new ReceitaService(receitaRepository);
+        this.receitaService = new ReceitaService(receitaRepository, ingredienteRepository);
     }
 
     @Test
@@ -98,6 +102,14 @@ public class ReceitaServiceTest {
         receita.setModoPreparo("novo modo de preparo");
 
         verify(receitaRepository, times(1)).save(receita);
+    }
+
+    @Test
+    public void shouldRemoveReceitaAndAllIngredientes() {
+        receitaService.delete(ID);
+
+        verify(ingredienteRepository, times(1)).deleteByReceitaId(ID);
+        verify(receitaRepository, times(1)).deleteById(ID);
     }
 
     public static Receita buildReceita() {

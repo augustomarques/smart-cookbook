@@ -15,4 +15,6 @@ public interface IngredienteRepository extends JpaRepository<Ingrediente, Long> 
     List<Ingrediente> findAllByReceitaId(Long receitaId);
 
     void deleteByIdAndReceitaId(Long id, Long receitaId);
+
+    void deleteByReceitaId(Long receitaId);
 }
