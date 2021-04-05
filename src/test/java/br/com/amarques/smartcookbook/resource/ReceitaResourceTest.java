@@ -113,4 +113,23 @@ public class ReceitaResourceTest {
 
         verify(receitaService, times(1)).update(id, dto);
     }
+
+    @Test
+    public void shouldFindByIngredientes() throws Exception {
+        ReceitaDTO receitaArroz = new ReceitaDTO(111L, "Arroz", "preparo abc");
+        ReceitaDTO receitaFeijão = new ReceitaDTO(222L, "Feijão", "preparo def");
+
+        when(receitaService.findByIngredientes(List.of("Ingrediente1", "Ingrediente2")))
+                .thenReturn(List.of(receitaArroz, receitaFeijão));
+
+        MvcResult mvcResult = mockMvc.perform(get("/receitas/buscar?ingredientes=Ingrediente1,Ingrediente2"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<ReceitaDTO> receitas = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
+                TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, ReceitaDTO.class));
+
+        assertNotNull(receitas);
+        assertThat(receitas.size(), is(equalTo(2)));
+    }
 }
