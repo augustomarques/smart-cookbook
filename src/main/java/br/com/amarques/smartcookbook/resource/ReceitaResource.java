@@ -74,4 +74,13 @@ public class ReceitaResource {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ReceitaDTO>> findByIngredientes(@RequestParam List<String> ingredientes) {
+        logger.info("REST request to get Receitas from Ingredientes [{}]", ingredientes);
+
+        List<ReceitaDTO> receitas =  service.findByIngredientes(ingredientes);
+
+        return ResponseEntity.ok().body(receitas);
+    }
 }

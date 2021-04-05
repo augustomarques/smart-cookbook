@@ -4,6 +4,7 @@ import br.com.amarques.smartcookbook.domain.Receita;
 import br.com.amarques.smartcookbook.dto.ReceitaDTO;
 import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
+import br.com.amarques.smartcookbook.exception.FindByIngredientesException;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.ReceitaMapper;
 import br.com.amarques.smartcookbook.repository.IngredienteRepository;
@@ -66,5 +67,35 @@ public class ReceitaService {
     public void delete(Long id) {
         ingredienteRepository.deleteByReceitaId(id);
         repository.deleteById(id);
+    }
+
+    public List<ReceitaDTO> findByIngredientes(List<String> ingredientes) {
+        if(CollectionUtils.isEmpty(ingredientes)) {
+            throw new FindByIngredientesException("It is necessary to inform at least one Ingrediente");
+        }
+
+        String queryParameters = buildIngredientesParameterRegex(ingredientes);
+
+        List<Receita> receitas = repository.findAllByIngredientes(queryParameters);
+        if (CollectionUtils.isEmpty(receitas)) {
+            return List.of();
+        }
+
+        return receitas.stream().map(ReceitaMapper::toDTO).collect(Collectors.toList());
+    }
+
+    private static String buildIngredientesParameterRegex(List<String> ingredientes) {
+        StringBuilder query = new StringBuilder();
+
+        for(int i = 0; i < ingredientes.size(); i++) {
+            String ingrediente = ingredientes.get(i);
+            query.append(ingrediente);
+
+            if(i < (ingredientes.size() - 1)) {
+                query.append("|");
+            }
+        }
+
+        return query.toString();
     }
 }
