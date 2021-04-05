@@ -10,6 +10,5 @@ CREATE TABLE `ingredientes` (
   `nome` varchar(255) DEFAULT NULL,
   `receita_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK__ingrediente__receita_id` (`receita_id`),
   CONSTRAINT `FK__ingrediente__receita_id` FOREIGN KEY (`receita_id`) REFERENCES `receitas` (`id`)
 );

@@ -10,14 +10,28 @@ spring:
 ---
 
 spring:
+  profiles: test
+  h2:
+    console:
+      enabled: false
+  datasource:
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 1234
+  jpa:
+    database: H2
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+---
+
+spring:
   profiles: dev
   devtools:
     restart:
       enabled: true
     livereload:
-      enabled: true
-  h2:
-    console:
       enabled: true
   datasource:
     url: jdbc:mysql://localhost:3306/smartcookbook?useSSL=false&useTimezone=true&serverTimezone=GMT-3
