@@ -3,6 +3,7 @@ package br.com.amarques.smartcookbook.service;
 import br.com.amarques.smartcookbook.domain.Receita;
 import br.com.amarques.smartcookbook.dto.ReceitaDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
+import br.com.amarques.smartcookbook.exception.FindByIngredientesException;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.repository.IngredienteRepository;
 import br.com.amarques.smartcookbook.repository.ReceitaRepository;
@@ -111,6 +112,23 @@ public class ReceitaServiceTest {
         verify(ingredienteRepository, times(1)).deleteByReceitaId(ID);
         verify(receitaRepository, times(1)).deleteById(ID);
     }
+
+    @Test
+    public void shouldThrowAnExceptionWhenNoIngredientIsReported() {
+        Exception exception = assertThrows(FindByIngredientesException.class, () -> receitaService.findByIngredientes(List.of()));
+
+        assertEquals(exception.getMessage(), "It is necessary to inform at least one Ingrediente");
+    }
+
+    @Test
+    public void shouldGenerateTheSearchParametersCorrectly() {
+        List<String> ingredientes = List.of("Ingrediante 1", "Ingrediante 2");
+        String queryParameter = "Ingrediante 1|Ingrediante 2";
+        receitaService.findByIngredientes(ingredientes);
+
+        verify(receitaRepository, times(1)).findAllByIngredientes(queryParameter);
+    }
+
 
     public static Receita buildReceita() {
         Receita receita = new Receita();
