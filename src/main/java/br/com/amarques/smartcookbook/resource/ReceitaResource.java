@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Api(value = "Receitas")
+@Api(value = "Receitas", tags = {"Receitas Resource"})
 @RestController
 @RequestMapping("/receitas")
 public class ReceitaResource {

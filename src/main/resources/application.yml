@@ -28,6 +28,9 @@ spring:
 
 spring:
   profiles: dev
+  h2:
+    console:
+      enabled: false
   devtools:
     restart:
       enabled: true
