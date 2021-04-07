@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -51,7 +52,7 @@ public class ReceitaResourceTest {
         Receita receita2 = new Receita();
         receita2.setId(2L);
 
-        when(receitaService.getAll()).thenReturn(List.of(ReceitaMapper.toDTO(receita1), ReceitaMapper.toDTO(receita2)));
+        when(receitaService.getAll(PageRequest.of(0, 10))).thenReturn(List.of(ReceitaMapper.toDTO(receita1), ReceitaMapper.toDTO(receita2)));
 
         MvcResult mvcResult = mockMvc.perform(get("/receitas"))
                 .andExpect(status().isOk())

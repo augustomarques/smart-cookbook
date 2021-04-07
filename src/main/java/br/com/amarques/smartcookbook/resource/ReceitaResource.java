@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,10 +60,11 @@ public class ReceitaResource {
 
     @GetMapping
     @ApiOperation(value = "Busca todas das receitas")
-    public ResponseEntity<List<ReceitaDTO>> gelAll() {
-        logger.info("REST request to gel all Receitas");
+    public ResponseEntity<List<ReceitaDTO>> gelAll(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                   @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        logger.info("REST request to gel all Receitas [Page: {0} - Size: {1}]", page, size);
 
-        List<ReceitaDTO> receitas = service.getAll();
+        List<ReceitaDTO> receitas = service.getAll(PageRequest.of(page, size));
 
         return ResponseEntity.ok().body(receitas);
     }

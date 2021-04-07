@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -62,18 +66,26 @@ public class ReceitaServiceTest {
 
     @Test
     void shouldFindAllAndReturnNone() {
-        when(receitaRepository.findAll()).thenReturn(List.of());
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Receita> receitas = List.of();
+        Page<Receita> pageOfReceita = new PageImpl<>(receitas.subList(0, 0), pageable, receitas.size());
 
-        List<ReceitaDTO> receitasDTO = receitaService.getAll();
+        when(receitaRepository.findAll(pageable)).thenReturn(pageOfReceita);
+
+        List<ReceitaDTO> receitasDTO = receitaService.getAll(pageable);
 
         assertTrue(receitasDTO.isEmpty());
     }
 
     @Test
     void shouldFindAllAndReturnTwoReceitas() {
-        when(receitaRepository.findAll()).thenReturn(List.of(buildReceita(), buildReceita()));
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Receita> receitas = List.of(buildReceita(), buildReceita());
 
-        List<ReceitaDTO> receitasDTO = receitaService.getAll();
+        Page<Receita> pageOfReceita = new PageImpl<>(receitas.subList(0, 2), pageable, receitas.size());
+        when(receitaRepository.findAll(pageable)).thenReturn(pageOfReceita);
+
+        List<ReceitaDTO> receitasDTO = receitaService.getAll(pageable);
 
         assertFalse(receitasDTO.isEmpty());
         assertThat(receitasDTO.size(), is(equalTo(2)));

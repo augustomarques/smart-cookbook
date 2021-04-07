@@ -10,6 +10,8 @@ import br.com.amarques.smartcookbook.mapper.ReceitaMapper;
 import br.com.amarques.smartcookbook.repository.IngredienteRepository;
 import br.com.amarques.smartcookbook.repository.ReceitaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -53,10 +55,10 @@ public class ReceitaService {
         repository.save(receita);
     }
 
-    public List<ReceitaDTO> getAll() {
-        List<Receita> receitas = repository.findAll();
+    public List<ReceitaDTO> getAll(Pageable pageable) {
+        Page<Receita> receitas = repository.findAll(pageable);
 
-        if (CollectionUtils.isEmpty(receitas)) {
+        if(!receitas.hasContent()) {
             return List.of();
         }
 
