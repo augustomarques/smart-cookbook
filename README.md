@@ -1,3 +1,3 @@
 # smart-cookbook
 
-- TESTE - Travis - CI
+[![Build Status](https://travis-ci.com/augustomarques/smart-cookbook.svg?branch=main)](https://travis-ci.com/augustomarques/smart-cookbook)
