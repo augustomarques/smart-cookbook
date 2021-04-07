@@ -14,6 +14,7 @@ services:
     networks:
       - smartcookbook-network
   api-smartcookbook:
+    image: augustomarques/smartcookbook
     build: .
     restart: always
     environment:
