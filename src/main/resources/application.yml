@@ -45,3 +45,25 @@ spring:
     hibernate:
       ddl-auto: validate
       use-new-id-generator-mappings: false
+
+---
+
+spring:
+  profiles: local
+  h2:
+    console:
+      enabled: false
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  datasource:
+    url: jdbc:mysql://db:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username: root
+    password: docker
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+      use-new-id-generator-mappings: false
