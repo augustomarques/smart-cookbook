@@ -11,6 +11,6 @@ deploy:
   script:
     docker push augustomarques/smartcookbook;
   on:
-    branch: master
+    branch: main
 notifications:
   email: false
