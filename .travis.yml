@@ -1,0 +1,16 @@
+lanhuage: bash
+services: docker
+before_install:
+  - echo "Iniciando o script!"
+script:
+  - docker-compose build
+before_deploy:
+  - echo "${DOCKER_HUB_PASSWORD}" | docker login --username "${DOCKER_HUB_LOGIN}" --password-stdin
+deploy:
+  provider: script
+  script:
+    docker push augustomarques/smartcookbook;
+  on:
+    branch: master
+notifications:
+  email: false
