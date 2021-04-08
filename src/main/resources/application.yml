@@ -1,19 +1,22 @@
 spring:
   profiles:
-    active: ${PROFILE:dev}
+    active: ${PROFILE:prod}
+  h2:
+    console:
+      enabled: false
   jackson:
     default-property-inclusion: NON_NULL
     property-naming-strategy: SNAKE_CASE
   jpa:
     open-in-view: false
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: validate
 
 ---
 
 spring:
   profiles: test
-  h2:
-    console:
-      enabled: false
   datasource:
     url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
     username: sa
@@ -21,16 +24,11 @@ spring:
   jpa:
     database: H2
     show-sql: true
-    hibernate:
-      ddl-auto: validate
 
 ---
 
 spring:
   profiles: dev
-  h2:
-    console:
-      enabled: false
   devtools:
     restart:
       enabled: true
@@ -42,17 +40,11 @@ spring:
     password: password
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: validate
-      use-new-id-generator-mappings: false
 
 ---
 
 spring:
   profiles: local
-  h2:
-    console:
-      enabled: false
   devtools:
     restart:
       enabled: false
@@ -64,6 +56,21 @@ spring:
     password: docker
   jpa:
     show-sql: false
-    hibernate:
-      ddl-auto: validate
-      use-new-id-generator-mappings: false
+
+---
+
+spring:
+  profiles: prod
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  datasource:
+    url: jdbc:mysql://db-smartcookbook.c8l3ipzqviwg.us-east-2.rds.amazonaws.com:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username: admin
+    password: passwordsmartcookbook
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    show-sql: false
