@@ -11,6 +11,6 @@ deploy:
   script:
     docker push augustomarques/smartcookbook;
   on:
-    branch: main
+    branch: feature/integracao-aws
 notifications:
   email: false
