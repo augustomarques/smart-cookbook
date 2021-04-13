@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${PROFILE:prod}
+    active: ${PROFILE:dev}
   h2:
     console:
       enabled: false
@@ -35,7 +35,7 @@ spring:
     livereload:
       enabled: true
   datasource:
-    url: jdbc:mysql://localhost:3306/smartcookbook?useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    url: jdbc:mysql://localhost:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
     username: root
     password: password
   jpa:
@@ -70,7 +70,5 @@ spring:
     url: jdbc:mysql://db-smartcookbook.c8l3ipzqviwg.us-east-2.rds.amazonaws.com:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
     username: admin
     password: passwordsmartcookbook
-    testWhileIdle: true
-    validationQuery: SELECT 1
   jpa:
     show-sql: false

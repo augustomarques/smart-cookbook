@@ -31,7 +31,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("Receitas Inteligentes - Rest APIs")
                 .description("Esta página lista todos os serviços REST da API de Receitas Inteligentes.")
-                .version("1.0")
+                .version("1.1")
                 .build();
     }
 }
