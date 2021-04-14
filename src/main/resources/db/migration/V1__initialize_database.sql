@@ -1,6 +1,6 @@
 CREATE TABLE `receitas` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `modo_preparo` varchar(255) DEFAULT NULL,
+  `modo_preparo` TEXT DEFAULT NULL,
   `nome` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
