@@ -21,14 +21,14 @@ import br.com.amarques.smartcookbook.dto.ReceitaDTO;
 import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
 import br.com.amarques.smartcookbook.service.ReceitaService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-@Api(value = "Receitas", tags = {"Receitas Resource"})
+@Tag(name = "Receitas")
 @RestController
 @RequestMapping("/receitas")
 public class ReceitaResource {
@@ -36,7 +36,7 @@ public class ReceitaResource {
     private final ReceitaService service;
 
     @PostMapping
-    @ApiOperation(value = "Cadastra uma nova Receita")
+    @Operation(summary = "Cadastra uma nova Receita")
     public ResponseEntity<SimpleEntityDTO> create(@Valid @RequestBody CreateUpdateReceitaDTO receitaDTO) {
         log.info(String.format("REST request to create a new Receita %s", receitaDTO));
 
@@ -46,7 +46,7 @@ public class ReceitaResource {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Busca uma Receita pelo ID")
+    @Operation(summary = "Busca uma Receita pelo ID")
     public ResponseEntity<ReceitaDTO> get(@PathVariable Long id) {
         log.info(String.format("REST request to get an Receita [id: %s]", id));
 
@@ -56,7 +56,7 @@ public class ReceitaResource {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Altera uma Receita cadastrada")
+    @Operation(summary = "Altera uma Receita cadastrada")
     public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody CreateUpdateReceitaDTO receitaDTO) {
         log.info(String.format("REST request to update an Receita [id: %s] [dto: %s]", id, receitaDTO));
 
@@ -66,7 +66,7 @@ public class ReceitaResource {
     }
 
     @GetMapping
-    @ApiOperation(value = "Busca todas das receitas")
+    @Operation(summary = "Busca todas das receitas")
     public ResponseEntity<List<ReceitaDTO>> gelAll(@RequestParam(value = "page", defaultValue = "0",
             required = false) int page,
             @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
@@ -78,6 +78,7 @@ public class ReceitaResource {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Remove uma Receita")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info(String.format("REST request to delete an Receita [id: %s] and all Ingredientes", id));
 
@@ -87,6 +88,7 @@ public class ReceitaResource {
     }
 
     @GetMapping("/buscar")
+    @Operation(summary = "Busca Receitas que tenham um dos ingredientes informados")
     public ResponseEntity<List<ReceitaDTO>> findByIngredientes(@RequestParam List<String> ingredientes) {
         log.info(String.format("REST request to get Receitas from Ingredientes [%s]", ingredientes));
 
