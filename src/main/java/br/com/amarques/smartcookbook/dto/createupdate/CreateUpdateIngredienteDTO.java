@@ -1,8 +1,12 @@
 package br.com.amarques.smartcookbook.dto.createupdate;
 
-import lombok.*;
+import javax.validation.constraints.NotBlank;
 
-import javax.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
@@ -10,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class CreateUpdateIngredienteDTO {
 
-    @NotEmpty(message = "O Nome é obrigatório")
+    @NotBlank(message = "O Nome é obrigatório")
     public final String nome;
 
 }
