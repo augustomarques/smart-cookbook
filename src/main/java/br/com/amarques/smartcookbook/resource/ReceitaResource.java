@@ -1,5 +1,22 @@
 package br.com.amarques.smartcookbook.resource;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.amarques.smartcookbook.dto.ReceitaDTO;
 import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
@@ -7,31 +24,21 @@ import br.com.amarques.smartcookbook.service.ReceitaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.Valid;
-import java.util.List;
-
+@Slf4j
 @RequiredArgsConstructor
 @Api(value = "Receitas", tags = {"Receitas Resource"})
 @RestController
 @RequestMapping("/receitas")
 public class ReceitaResource {
 
-    private final Logger logger = LoggerFactory.getLogger(ReceitaResource.class);
-
     private final ReceitaService service;
 
     @PostMapping
     @ApiOperation(value = "Cadastra uma nova Receita")
     public ResponseEntity<SimpleEntityDTO> create(@Valid @RequestBody CreateUpdateReceitaDTO receitaDTO) {
-        logger.info("REST request to create a new Receita {}", receitaDTO);
+        log.info(String.format("REST request to create a new Receita %s", receitaDTO));
 
         SimpleEntityDTO simpleEntityDTO = service.create(receitaDTO);
 
@@ -41,7 +48,7 @@ public class ReceitaResource {
     @GetMapping("/{id}")
     @ApiOperation(value = "Busca uma Receita pelo ID")
     public ResponseEntity<ReceitaDTO> get(@PathVariable Long id) {
-        logger.info("REST request to get an Receita [id: {}]", id);
+        log.info(String.format("REST request to get an Receita [id: %s]", id));
 
         ReceitaDTO receitaDTO = service.get(id);
 
@@ -51,7 +58,7 @@ public class ReceitaResource {
     @PutMapping("/{id}")
     @ApiOperation(value = "Altera uma Receita cadastrada")
     public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody CreateUpdateReceitaDTO receitaDTO) {
-        logger.info("REST request to update an Receita [id: {0]] [dto: {1]]", id, receitaDTO);
+        log.info(String.format("REST request to update an Receita [id: %s] [dto: %s]", id, receitaDTO));
 
         service.update(id, receitaDTO);
 
@@ -60,9 +67,10 @@ public class ReceitaResource {
 
     @GetMapping
     @ApiOperation(value = "Busca todas das receitas")
-    public ResponseEntity<List<ReceitaDTO>> gelAll(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
-                                                   @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
-        logger.info("REST request to gel all Receitas [Page: {0} - Size: {1}]", page, size);
+    public ResponseEntity<List<ReceitaDTO>> gelAll(@RequestParam(value = "page", defaultValue = "0",
+            required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        log.info(String.format("REST request to gel all Receitas [Page: %d  - Size: %d]", page, size));
 
         List<ReceitaDTO> receitas = service.getAll(PageRequest.of(page, size));
 
@@ -71,7 +79,7 @@ public class ReceitaResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        logger.info("REST request to delete an Receita [id: {}] and all Ingredientes", id);
+        log.info(String.format("REST request to delete an Receita [id: %s] and all Ingredientes", id));
 
         service.delete(id);
 
@@ -80,9 +88,9 @@ public class ReceitaResource {
 
     @GetMapping("/buscar")
     public ResponseEntity<List<ReceitaDTO>> findByIngredientes(@RequestParam List<String> ingredientes) {
-        logger.info("REST request to get Receitas from Ingredientes [{}]", ingredientes);
+        log.info(String.format("REST request to get Receitas from Ingredientes [%s]", ingredientes));
 
-        List<ReceitaDTO> receitas =  service.findByIngredientes(ingredientes);
+        List<ReceitaDTO> receitas = service.findByIngredientes(ingredientes);
 
         return ResponseEntity.ok().body(receitas);
     }
