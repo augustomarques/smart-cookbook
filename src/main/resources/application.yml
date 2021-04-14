@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${PROFILE:dev}
+    active: dev
   h2:
     console:
       enabled: false
