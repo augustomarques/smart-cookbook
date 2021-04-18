@@ -55,8 +55,8 @@ spring:
     livereload:
       enabled: false
   datasource:
-    url: jdbc:mysql://db-smartcookbook.c8l3ipzqviwg.us-east-2.rds.amazonaws.com:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
-    username: admin
-    password: passwordsmartcookbook
+    url: jdbc:mysql://${MYSQL_DB_URL}:${MYSQL_DB_PORT}/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username:  ${MYSQL_DB_USERNAME}
+    password:  ${MYSQL_DB_PASSWORD}
   jpa:
     show-sql: false
