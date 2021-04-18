@@ -21,7 +21,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push 533402739247.dkr.ecr.us-east-2.amazonaws.com/smartcookbook:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"devops","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - printf '[{"name":"smartcookbook","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: 
