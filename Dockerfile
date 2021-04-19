@@ -6,6 +6,6 @@ RUN mvn clean package
 
 FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
 VOLUME /tmp
-EXPOSE 8080
+EXPOSE 80
 COPY --from=builder "/app/target/smartcookbook-*-SNAPSHOT.jar" app.jar
 ENTRYPOINT [ "java", "-Djava.security.egd=file:/dev/.urandom", "-jar", "/app.jar" ]
