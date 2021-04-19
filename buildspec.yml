@@ -14,14 +14,14 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker-compose build
-      - docker tag smartcookbook:latest 533402739247.dkr.ecr.us-east-2.amazonaws.com/smartcookbook:latest
+      - docker tag smartcookbook:latest $REPOSITORY_URI:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push 533402739247.dkr.ecr.us-east-2.amazonaws.com/smartcookbook:latest
+      - docker push $REPOSITORY_URI:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"smartcookbook","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - printf '[{"name":"container-smartcookbook","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: 
