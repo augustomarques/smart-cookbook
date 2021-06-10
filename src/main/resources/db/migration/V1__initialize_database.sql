@@ -3,7 +3,7 @@ CREATE TABLE `receitas` (
   `modo_preparo` TEXT DEFAULT NULL,
   `nome` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `ingredientes` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -11,4 +11,4 @@ CREATE TABLE `ingredientes` (
   `receita_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK__ingrediente__receita_id` FOREIGN KEY (`receita_id`) REFERENCES `receitas` (`id`)
-);
+) ENGINE=InnoDB;

@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Tag(name = "Receitas")
 @RestController
-@RequestMapping("/receitas")
+@RequestMapping("/api/receitas")
 public class ReceitaResource {
 
     private final ReceitaService service;

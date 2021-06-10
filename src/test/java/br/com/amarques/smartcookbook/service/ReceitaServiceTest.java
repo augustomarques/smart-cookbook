@@ -1,12 +1,21 @@
 package br.com.amarques.smartcookbook.service;
 
-import br.com.amarques.smartcookbook.domain.Receita;
-import br.com.amarques.smartcookbook.dto.ReceitaDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
-import br.com.amarques.smartcookbook.exception.FindByIngredientesException;
-import br.com.amarques.smartcookbook.exception.NotFoundException;
-import br.com.amarques.smartcookbook.repository.IngredienteRepository;
-import br.com.amarques.smartcookbook.repository.ReceitaRepository;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,18 +26,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.amarques.smartcookbook.domain.Receita;
+import br.com.amarques.smartcookbook.dto.ReceitaDTO;
+import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
+import br.com.amarques.smartcookbook.exception.FindByIngredientesException;
+import br.com.amarques.smartcookbook.exception.NotFoundException;
+import br.com.amarques.smartcookbook.repository.IngredienteRepository;
+import br.com.amarques.smartcookbook.repository.ReceitaRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class ReceitaServiceTest {
+class ReceitaServiceTest {
 
     @Mock
     private ReceitaRepository receitaRepository;
@@ -44,7 +51,7 @@ public class ReceitaServiceTest {
     }
 
     @Test
-    public void shouldFindByIDAndReturnDTO() {
+    void shouldFindByIDAndReturnDTO() {
         when(receitaRepository.findById(ID)).thenReturn(Optional.of(buildReceita()));
 
         ReceitaDTO receitaDTO = receitaService.get(ID);
@@ -56,7 +63,7 @@ public class ReceitaServiceTest {
     }
 
     @Test
-    public void shouldThrowNotFoundExceptionWhenFindByIDNotRegistered() {
+    void shouldThrowNotFoundExceptionWhenFindByIDNotRegistered() {
         when(receitaRepository.findById(ID)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(NotFoundException.class, () -> receitaService.get(ID));
@@ -118,7 +125,7 @@ public class ReceitaServiceTest {
     }
 
     @Test
-    public void shouldRemoveReceitaAndAllIngredientes() {
+    void shouldRemoveReceitaAndAllIngredientes() {
         receitaService.delete(ID);
 
         verify(ingredienteRepository, times(1)).deleteByReceitaId(ID);
@@ -126,21 +133,21 @@ public class ReceitaServiceTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenNoIngredientIsReported() {
-        Exception exception = assertThrows(FindByIngredientesException.class, () -> receitaService.findByIngredientes(List.of()));
+    void shouldThrowAnExceptionWhenNoIngredientIsReported() {
+        Exception exception = assertThrows(FindByIngredientesException.class, () -> receitaService.findByIngredientes(
+                List.of()));
 
-        assertEquals(exception.getMessage(), "It is necessary to inform at least one Ingrediente");
+        assertEquals("It is necessary to inform at least one Ingrediente", exception.getMessage());
     }
 
     @Test
-    public void shouldGenerateTheSearchParametersCorrectly() {
+    void shouldGenerateTheSearchParametersCorrectly() {
         List<String> ingredientes = List.of("Ingrediante 1", "Ingrediante 2");
         String queryParameter = "Ingrediante 1|Ingrediante 2";
         receitaService.findByIngredientes(ingredientes);
 
         verify(receitaRepository, times(1)).findAllByIngredientes(queryParameter);
     }
-
 
     public static Receita buildReceita() {
         Receita receita = new Receita();

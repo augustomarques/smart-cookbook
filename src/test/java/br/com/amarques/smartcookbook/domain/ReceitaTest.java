@@ -1,16 +1,16 @@
 package br.com.amarques.smartcookbook.domain;
 
-import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ReceitaTest {
+import org.junit.jupiter.api.Test;
+
+class ReceitaTest {
 
     @Test
-    public void shouldCreateReceita() {
+    void shouldCreateReceita() {
         Receita receita = new Receita();
         receita.setId(1L);
         receita.setNome("NOME TESTE");

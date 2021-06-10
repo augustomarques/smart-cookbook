@@ -14,4 +14,11 @@ public class AppExceptionHandler {
     public ResponseEntity<Object> handleNotFoundException(NotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
+
+    @ResponseBody
+    @ExceptionHandler(value = FindByIngredientesException.class)
+    public ResponseEntity<Object> handleNotFoundException(FindByIngredientesException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
 }

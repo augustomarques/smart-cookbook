@@ -1,5 +1,26 @@
 package br.com.amarques.smartcookbook.service;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import br.com.amarques.smartcookbook.domain.Ingrediente;
 import br.com.amarques.smartcookbook.domain.Receita;
 import br.com.amarques.smartcookbook.dto.IngredienteDTO;
@@ -7,24 +28,9 @@ import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredienteDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.repository.IngredienteRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class IngredienteServiceTest {
+class IngredienteServiceTest {
 
     @Mock
     private IngredienteRepository ingredienteRepository;
@@ -40,8 +46,9 @@ public class IngredienteServiceTest {
     }
 
     @Test
-    public void shouldReturnRegisteredIngrediente() {
-        when(ingredienteRepository.findByIdAndReceitaId(INGREDIENTE_ID, RECEITA_ID)).thenReturn(Optional.of(buildIngrediente()));
+    void shouldReturnRegisteredIngrediente() {
+        when(ingredienteRepository.findByIdAndReceitaId(INGREDIENTE_ID, RECEITA_ID))
+                .thenReturn(Optional.of(buildIngrediente()));
 
         IngredienteDTO ingredienteDTO = ingredienteService.get(RECEITA_ID, INGREDIENTE_ID);
 
@@ -51,18 +58,21 @@ public class IngredienteServiceTest {
     }
 
     @Test
-    public void shouldThrowNotFoundExceptionWhenFindUnregisteredID() {
+    void shouldThrowNotFoundExceptionWhenFindUnregisteredID() {
         when(ingredienteRepository.findByIdAndReceitaId(INGREDIENTE_ID, RECEITA_ID)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(NotFoundException.class, () -> ingredienteService.get(RECEITA_ID, INGREDIENTE_ID));
+        Exception exception = assertThrows(NotFoundException.class, () -> ingredienteService.get(RECEITA_ID,
+                INGREDIENTE_ID));
 
-        assertEquals(exception.getMessage(), MessageFormat.format("Ingrediente [id: {0}] not found for Receita [id: {1}]",
+        assertEquals(exception.getMessage(), MessageFormat.format(
+                "Ingrediente [id: {0}] not found for Receita [id: {1}]",
                 INGREDIENTE_ID, RECEITA_ID));
     }
 
     @Test
-    public void shouldReturnAllIngredientesOfReceita() {
-        when(ingredienteRepository.findAllByReceitaId(RECEITA_ID)).thenReturn(List.of(buildIngrediente(), buildIngrediente()));
+    void shouldReturnAllIngredientesOfReceita() {
+        when(ingredienteRepository.findAllByReceitaId(RECEITA_ID))
+                .thenReturn(List.of(buildIngrediente(), buildIngrediente()));
 
         List<IngredienteDTO> ingredientes = ingredienteService.getAll(RECEITA_ID);
 
@@ -71,7 +81,7 @@ public class IngredienteServiceTest {
     }
 
     @Test
-    public void shouldFindAllAndReturnNone() {
+    void shouldFindAllAndReturnNone() {
         when(ingredienteRepository.findAllByReceitaId(RECEITA_ID)).thenReturn(List.of());
 
         List<IngredienteDTO> ingredientes = ingredienteService.getAll(RECEITA_ID);
@@ -80,7 +90,7 @@ public class IngredienteServiceTest {
     }
 
     @Test
-    public void shouldCreateNewIngrediente() {
+    void shouldCreateNewIngrediente() {
         when(receitaService.findById(RECEITA_ID)).thenReturn(new Receita());
 
         CreateUpdateIngredienteDTO ingredienteDTO = new CreateUpdateIngredienteDTO(NOME);
@@ -91,8 +101,9 @@ public class IngredienteServiceTest {
     }
 
     @Test
-    public void shouldUpdateIngrediente() {
-        when(ingredienteRepository.findByIdAndReceitaId(INGREDIENTE_ID, RECEITA_ID)).thenReturn(Optional.of(buildIngrediente()));
+    void shouldUpdateIngrediente() {
+        when(ingredienteRepository.findByIdAndReceitaId(INGREDIENTE_ID, RECEITA_ID))
+                .thenReturn(Optional.of(buildIngrediente()));
 
         CreateUpdateIngredienteDTO ingredienteDTO = new CreateUpdateIngredienteDTO("novo nome ingrediente");
 
@@ -105,7 +116,7 @@ public class IngredienteServiceTest {
     }
 
     @Test
-    public void shouldDelete() {
+    void shouldDelete() {
         ingredienteService.delete(RECEITA_ID, INGREDIENTE_ID);
 
         verify(ingredienteRepository, times(1)).deleteByIdAndReceitaId(INGREDIENTE_ID, RECEITA_ID);

@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Tag(name = "Ingredientes")
 @RestController
-@RequestMapping("/receitas/{receitaId}/ingredientes")
+@RequestMapping("/api/receitas/{receitaId}/ingredientes")
 public class IngredienteResource {
 
     private final IngredienteService service;

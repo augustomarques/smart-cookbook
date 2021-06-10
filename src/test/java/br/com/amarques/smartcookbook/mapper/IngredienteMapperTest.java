@@ -1,21 +1,22 @@
 package br.com.amarques.smartcookbook.mapper;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.Test;
+
 import br.com.amarques.smartcookbook.domain.Ingrediente;
 import br.com.amarques.smartcookbook.domain.Receita;
 import br.com.amarques.smartcookbook.dto.IngredienteDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredienteDTO;
-import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-public class IngredienteMapperTest {
+class IngredienteMapperTest {
 
     @Test
-    public void shouldConvertDTOToEntity() {
+    void shouldConvertDTOToEntity() {
         CreateUpdateIngredienteDTO dto = new CreateUpdateIngredienteDTO("Arroz");
         Receita receita = new Receita();
 
@@ -28,7 +29,7 @@ public class IngredienteMapperTest {
     }
 
     @Test
-    public void shouldConvertEntityToDTO() {
+    void shouldConvertEntityToDTO() {
         Receita receita = new Receita();
         Ingrediente ingrediente = new Ingrediente(receita);
         ingrediente.setId(1L);

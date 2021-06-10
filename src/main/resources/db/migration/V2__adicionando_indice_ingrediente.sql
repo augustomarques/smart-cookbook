@@ -1,1 +1,1 @@
-ALTER TABLE `receitas` MODIFY `modo_preparo` TEXT DEFAULT NULL;
+ALTER TABLE `ingredientes` ADD INDEX idx__ingrediente_nome (`nome`);

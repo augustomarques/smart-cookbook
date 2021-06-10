@@ -1,19 +1,20 @@
 package br.com.amarques.smartcookbook.repository;
 
-import br.com.amarques.smartcookbook.domain.Ingrediente;
-import br.com.amarques.smartcookbook.domain.Receita;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ReceitaRepositoryTest extends RepositoryBaseIT {
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import br.com.amarques.smartcookbook.domain.Ingrediente;
+import br.com.amarques.smartcookbook.domain.Receita;
+
+class ReceitaRepositoryTest extends RepositoryBaseIT {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -22,7 +23,7 @@ public class ReceitaRepositoryTest extends RepositoryBaseIT {
     private ReceitaRepository receitaRepository;
 
     @Test
-    public void mustReturnTheRecipesThatContainTheIngredientSought() {
+    void mustReturnTheRecipesThatContainTheIngredientSought() {
         Receita receitaArroz = new Receita();
         receitaArroz.setNome("Arroz branco");
         receitaArroz.setModoPreparo("Modo de preparo do Arroz");

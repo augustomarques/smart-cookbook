@@ -1,13 +1,22 @@
 package br.com.amarques.smartcookbook.resource;
 
-import br.com.amarques.smartcookbook.domain.Receita;
-import br.com.amarques.smartcookbook.dto.ReceitaDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
-import br.com.amarques.smartcookbook.mapper.ReceitaMapper;
-import br.com.amarques.smartcookbook.service.ReceitaService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +27,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import br.com.amarques.smartcookbook.domain.Receita;
+import br.com.amarques.smartcookbook.dto.ReceitaDTO;
+import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateReceitaDTO;
+import br.com.amarques.smartcookbook.mapper.ReceitaMapper;
+import br.com.amarques.smartcookbook.service.ReceitaService;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = ReceitaResource.class)
-public class ReceitaResourceTest {
+class ReceitaResourceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,16 +51,17 @@ public class ReceitaResourceTest {
     private ReceitaService receitaService;
 
     @Test
-    public void shouldReturnAllReceitasRegistered() throws Exception {
+    void shouldReturnAllReceitasRegistered() throws Exception {
         Receita receita1 = new Receita();
         receita1.setId(1L);
 
         Receita receita2 = new Receita();
         receita2.setId(2L);
 
-        when(receitaService.getAll(PageRequest.of(0, 10))).thenReturn(List.of(ReceitaMapper.toDTO(receita1), ReceitaMapper.toDTO(receita2)));
+        when(receitaService.getAll(PageRequest.of(0, 10))).thenReturn(List.of(ReceitaMapper.toDTO(receita1),
+                ReceitaMapper.toDTO(receita2)));
 
-        MvcResult mvcResult = mockMvc.perform(get("/receitas"))
+        MvcResult mvcResult = mockMvc.perform(get("/api/receitas"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -66,14 +73,14 @@ public class ReceitaResourceTest {
     }
 
     @Test
-    public void shouldReturnReceitaWhenFindByID() throws Exception {
+    void shouldReturnReceitaWhenFindByID() throws Exception {
         final Long id = 1L;
         Receita receita1 = new Receita();
         receita1.setId(id);
 
         when(receitaService.get(id)).thenReturn(ReceitaMapper.toDTO(receita1));
 
-        MvcResult mvcResult = mockMvc.perform(get("/receitas/{id}", 1L))
+        MvcResult mvcResult = mockMvc.perform(get("/api/receitas/{id}", 1L))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -89,7 +96,7 @@ public class ReceitaResourceTest {
         CreateUpdateReceitaDTO receitaDTO = new CreateUpdateReceitaDTO("Arroz branco", "Modo de preparo teste");
         when(receitaService.create(receitaDTO)).thenReturn(new SimpleEntityDTO(id));
 
-        MvcResult mvcResult = mockMvc.perform(post("/receitas")
+        MvcResult mvcResult = mockMvc.perform(post("/api/receitas")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(receitaDTO)))
                 .andExpect(status().isCreated())
@@ -107,7 +114,7 @@ public class ReceitaResourceTest {
         final Long id = 123L;
         CreateUpdateReceitaDTO dto = new CreateUpdateReceitaDTO("nome", "modo de preparo");
 
-        mockMvc.perform(put("/receitas/{id}", id)
+        mockMvc.perform(put("/api/receitas/{id}", id)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -116,14 +123,14 @@ public class ReceitaResourceTest {
     }
 
     @Test
-    public void shouldFindByIngredientes() throws Exception {
+    void shouldFindByIngredientes() throws Exception {
         ReceitaDTO receitaArroz = new ReceitaDTO(111L, "Arroz", "preparo abc");
         ReceitaDTO receitaFeijão = new ReceitaDTO(222L, "Feijão", "preparo def");
 
         when(receitaService.findByIngredientes(List.of("Ingrediente1", "Ingrediente2")))
                 .thenReturn(List.of(receitaArroz, receitaFeijão));
 
-        MvcResult mvcResult = mockMvc.perform(get("/receitas/buscar?ingredientes=Ingrediente1,Ingrediente2"))
+        MvcResult mvcResult = mockMvc.perform(get("/api/receitas/buscar?ingredientes=Ingrediente1,Ingrediente2"))
                 .andExpect(status().isOk())
                 .andReturn();
 
