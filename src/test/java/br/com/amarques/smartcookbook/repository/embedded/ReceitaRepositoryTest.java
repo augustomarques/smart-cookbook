@@ -1,4 +1,4 @@
-package br.com.amarques.smartcookbook.repository;
+package br.com.amarques.smartcookbook.repository.embedded;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,8 +13,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import br.com.amarques.smartcookbook.domain.Ingrediente;
 import br.com.amarques.smartcookbook.domain.Receita;
+import br.com.amarques.smartcookbook.repository.ReceitaRepository;
 
-class ReceitaRepositoryTest extends RepositoryBaseIT {
+class ReceitaRepositoryTest extends EmbeddedRepositoryTestIT {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -23,7 +24,7 @@ class ReceitaRepositoryTest extends RepositoryBaseIT {
     private ReceitaRepository receitaRepository;
 
     @Test
-    void mustReturnTheRecipesThatContainTheIngredientSought() {
+    void shouldReturnTheReceitaThatContainsTheIngredienteThatWasSought() {
         Receita receitaArroz = new Receita();
         receitaArroz.setNome("Arroz branco");
         receitaArroz.setModoPreparo("Modo de preparo do Arroz");
@@ -50,6 +51,31 @@ class ReceitaRepositoryTest extends RepositoryBaseIT {
         assertNotNull(receitasQuemTemArroz);
         assertThat(receitasQuemTemArroz.size(), is(equalTo(1)));
         assertThat(receitasQuemTemArroz.get(0).getNome(), is(equalTo("Arroz branco")));
+    }
+
+    @Test
+    void shouldReturnTheReceitasThatContainAllTheIngredientesThatWereSearched() {
+        Receita receitaArroz = new Receita();
+        receitaArroz.setNome("Arroz branco");
+        receitaArroz.setModoPreparo("Modo de preparo do Arroz");
+
+        Receita receitaFeijao = new Receita();
+        receitaFeijao.setNome("Feijão");
+        receitaFeijao.setModoPreparo("Modo de preparo do Feijão");
+
+        entityManager.persist(receitaArroz);
+        entityManager.persist(receitaFeijao);
+
+        Ingrediente ingredienteArroz = new Ingrediente(receitaArroz);
+        ingredienteArroz.setNome("Arroz");
+        Ingrediente ingredienteAlho = new Ingrediente(receitaArroz);
+        ingredienteAlho.setNome("Alho");
+        Ingrediente ingredienteFeijao = new Ingrediente(receitaFeijao);
+        ingredienteFeijao.setNome("Feijão");
+
+        entityManager.persist(ingredienteArroz);
+        entityManager.persist(ingredienteAlho);
+        entityManager.persist(ingredienteFeijao);
 
         List<Receita> receitasQuemTemArrozOuFeijão = receitaRepository.findAllByIngredientes("Arroz|Feijão");
         assertNotNull(receitasQuemTemArrozOuFeijão);
