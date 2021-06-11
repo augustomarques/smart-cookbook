@@ -1,6 +1,7 @@
 server:
   port: ${SERVER_PORT:8080}
 spring:
+  application:    name: smart-cookbook
   profiles:
     active: dev
   h2:
@@ -18,7 +19,9 @@ spring:
 ---
 
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
   devtools:
     restart:
       enabled: true
@@ -34,7 +37,9 @@ spring:
 ---
 
 spring:
-  profiles: local
+  config:
+    activate:
+      on-profile: local
   devtools:
     restart:
       enabled: false
@@ -50,7 +55,9 @@ spring:
 ---
 
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   devtools:
     restart:
       enabled: false
