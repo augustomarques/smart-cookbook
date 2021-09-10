@@ -1,7 +1,8 @@
 server:
   port: ${SERVER_PORT:8080}
 spring:
-  application:    name: smart-cookbook
+  application:
+    name: smart-cookbook
   profiles:
     active: dev
   h2:
@@ -15,6 +16,24 @@ spring:
     hibernate:
       use-new-id-generator-mappings: false
       ddl-auto: validate
+  cloud:
+    stream:
+      kafka:
+        binder:
+          autoAddPartitions: true
+          replication-factor: 1
+          autoCreateTopics: true
+        bindings:
+          saveReceitaEvent-in-0:
+            consumer:
+              enableDlq: true
+      bindings:
+        saveRecipeEvent-in-0:
+          destination: smartcookbook-create-recipe-event
+          group: smartcookbook
+          contentType: application/json
+          consumer:
+            maxAttempts: 3
 
 ---
 
@@ -33,6 +52,15 @@ spring:
     password: password
   jpa:
     show-sql: true
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        saveRecipeEvent-in-0:
+          consumer:
+            concurrency: 1
 
 ---
 
@@ -51,6 +79,15 @@ spring:
     password: docker
   jpa:
     show-sql: false
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        saveRecipeEvent-in-0:
+          consumer:
+            concurrency: 1
 
 ---
 
@@ -69,3 +106,12 @@ spring:
     password: ${MYSQL_DB_PASSWORD}
   jpa:
     show-sql: false
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_BROKER}
+      bindings:
+        saveRecipeEvent-in-0:
+          consumer:
+            concurrency: 3
