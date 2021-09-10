@@ -1,1 +1,1 @@
-ALTER TABLE `ingredientes` ADD INDEX idx__ingrediente_nome (`nome`);
+ALTER TABLE `ingredients` ADD INDEX idx__ingredient_name (`name`);

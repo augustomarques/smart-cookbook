@@ -1,14 +1,14 @@
-CREATE TABLE `receitas` (
+CREATE TABLE `recipes` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `modo_preparo` TEXT DEFAULT NULL,
-  `nome` varchar(255) DEFAULT NULL,
+  `way_of_doing` TEXT DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `ingredientes` (
+CREATE TABLE `ingredients` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) DEFAULT NULL,
-  `receita_id` bigint DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `recipe_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `FK__ingrediente__receita_id` FOREIGN KEY (`receita_id`) REFERENCES `receitas` (`id`)
+  CONSTRAINT `FK__ingredient__recipe_id` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`)
 ) ENGINE=InnoDB;

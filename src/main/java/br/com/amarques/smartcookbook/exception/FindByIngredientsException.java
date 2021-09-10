@@ -1,10 +1,10 @@
 package br.com.amarques.smartcookbook.exception;
 
-public class FindByIngredientesException extends RuntimeException {
+public class FindByIngredientsException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public FindByIngredientesException(String message) {
+    public FindByIngredientsException(final String message) {
         super(message);
     }
 }

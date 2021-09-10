@@ -8,10 +8,9 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-public class ReceitaDTO {
+public class IngredientDTO {
 
     public final Long id;
-    public final String nome;
-    public final String modoPreparo;
+    public final String name;
 
 }
