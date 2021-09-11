@@ -2,12 +2,12 @@ package br.com.amarques.smartcookbook.service;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.IngredientDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.repository.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,10 +20,16 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class IngredientServiceTest {
 
     @Mock
@@ -40,91 +46,92 @@ class IngredientServiceTest {
     }
 
     @Test
-    void shouldReturnRegisteredIngrediente() {
-        when(ingredientRepository.findByIdAndRecipeId(INGREDIENTE_ID, RECEITA_ID))
-                .thenReturn(Optional.of(buildIngrediente()));
+    void should_return_registered_ingredient() {
+        when(ingredientRepository.findByIdAndRecipeId(INGREDIENT_ID, RECIPE_ID))
+            .thenReturn(Optional.of(buildIngredient()));
 
-        IngredientDTO ingredientDTO = ingredientService.get(RECEITA_ID, INGREDIENTE_ID);
+        final var ingredientDTO = ingredientService.get(RECIPE_ID, INGREDIENT_ID);
 
         assertNotNull(ingredientDTO);
-        assertThat(ingredientDTO.id, is(equalTo(INGREDIENTE_ID)));
-        assertThat(ingredientDTO.name, is(equalTo(NOME)));
+        assertThat(ingredientDTO.id, is(equalTo(INGREDIENT_ID)));
+        assertThat(ingredientDTO.name, is(equalTo(NAME)));
     }
 
     @Test
-    void shouldThrowNotFoundExceptionWhenFindUnregisteredID() {
-        when(ingredientRepository.findByIdAndRecipeId(INGREDIENTE_ID, RECEITA_ID)).thenReturn(Optional.empty());
+    void should_throw_not_found_exception_when_find_unregistered_id() {
+        when(ingredientRepository.findByIdAndRecipeId(INGREDIENT_ID, RECIPE_ID)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(NotFoundException.class, () -> ingredientService.get(RECEITA_ID,
-                INGREDIENTE_ID));
+        final var exception = assertThrows(NotFoundException.class, () -> ingredientService.get(RECIPE_ID,
+            INGREDIENT_ID));
 
         assertEquals(exception.getMessage(), MessageFormat.format(
-                "Ingrediente [id: {0}] not found for Receita [id: {1}]",
-                INGREDIENTE_ID, RECEITA_ID));
+            "Ingredient [id: {0}] not found for Recipe [id: {1}]",
+            INGREDIENT_ID, RECIPE_ID));
     }
 
     @Test
-    void shouldReturnAllIngredientesOfReceita() {
-        when(ingredientRepository.findAllByRecipeId(RECEITA_ID))
-                .thenReturn(List.of(buildIngrediente(), buildIngrediente()));
+    void should_return_all_ingredients_of_recipe() {
+        when(ingredientRepository.findAllByRecipeId(RECIPE_ID))
+            .thenReturn(List.of(buildIngredient(), buildIngredient()));
 
-        List<IngredientDTO> ingredientes = ingredientService.getAll(RECEITA_ID);
+        final var ingredients = ingredientService.getAll(RECIPE_ID);
 
-        assertNotNull(ingredientes);
-        assertThat(ingredientes.size(), is(equalTo(2)));
+        assertNotNull(ingredients);
+        assertThat(ingredients.size(), is(equalTo(2)));
     }
 
     @Test
-    void shouldFindAllAndReturnNone() {
-        when(ingredientRepository.findAllByRecipeId(RECEITA_ID)).thenReturn(List.of());
+    void should_find_all_and_return_none() {
+        when(ingredientRepository.findAllByRecipeId(RECIPE_ID)).thenReturn(List.of());
 
-        List<IngredientDTO> ingredientes = ingredientService.getAll(RECEITA_ID);
+        final var ingredients = ingredientService.getAll(RECIPE_ID);
 
-        assertTrue(ingredientes.isEmpty());
+        assertTrue(ingredients.isEmpty());
     }
 
     @Test
-    void shouldCreateNewIngrediente() {
-        when(recipeService.findById(RECEITA_ID)).thenReturn(new Recipe());
+    void should_create_new_ingredient() {
+        when(recipeService.findById(RECIPE_ID)).thenReturn(new Recipe());
 
-        CreateUpdateIngredientDTO ingredienteDTO = new CreateUpdateIngredientDTO(NOME);
+        final var ingredienteDTO = new CreateUpdateIngredientDTO(NAME);
 
-        SimpleEntityDTO simpleEntityDTO = ingredientService.create(RECEITA_ID, ingredienteDTO);
+        final var simpleEntityDTO = ingredientService.create(RECIPE_ID, ingredienteDTO);
 
         assertNotNull(simpleEntityDTO);
     }
 
     @Test
-    void shouldUpdateIngrediente() {
-        when(ingredientRepository.findByIdAndRecipeId(INGREDIENTE_ID, RECEITA_ID))
-                .thenReturn(Optional.of(buildIngrediente()));
+    void should_update_ingredient() {
+        when(ingredientRepository.findByIdAndRecipeId(INGREDIENT_ID, RECIPE_ID))
+            .thenReturn(Optional.of(buildIngredient()));
 
-        CreateUpdateIngredientDTO ingredienteDTO = new CreateUpdateIngredientDTO("novo nome ingrediente");
+        final var ingredientDTO = new CreateUpdateIngredientDTO("new name");
 
-        Ingredient ingredient = buildIngrediente();
-        ingredient.setName(ingredienteDTO.name);
+        final var ingredient = buildIngredient();
+        ingredient.setName(ingredientDTO.name);
 
-        ingredientService.update(RECEITA_ID, INGREDIENTE_ID, ingredienteDTO);
+        ingredientService.update(RECIPE_ID, INGREDIENT_ID, ingredientDTO);
 
         verify(ingredientRepository, times(1)).save(ingredient);
     }
 
     @Test
-    void shouldDelete() {
-        ingredientService.delete(RECEITA_ID, INGREDIENTE_ID);
+    void should_delete() {
+        ingredientService.delete(RECIPE_ID, INGREDIENT_ID);
 
-        verify(ingredientRepository, times(1)).deleteByIdAndRecipeId(INGREDIENTE_ID, RECEITA_ID);
+        verify(ingredientRepository, times(1)).deleteByIdAndRecipeId(INGREDIENT_ID, RECIPE_ID);
     }
 
-    public static Ingredient buildIngrediente() {
-        Ingredient ingredient = new Ingredient(RECIPE);
-        ingredient.setId(INGREDIENTE_ID);
-        ingredient.setName(NOME);
+    public static Ingredient buildIngredient() {
+        final var ingredient = new Ingredient(RECIPE);
+        ingredient.setId(INGREDIENT_ID);
+        ingredient.setName(NAME);
         return ingredient;
     }
 
-    private static final Long RECEITA_ID = 999L;
-    private static final Long INGREDIENTE_ID = 123L;
-    private static final String NOME = "Arroz";
+    private static final Long RECIPE_ID = 999L;
+    private static final Long INGREDIENT_ID = 123L;
+    private static final String NAME = "Rice";
     private static final Recipe RECIPE = new Recipe();
+
 }
