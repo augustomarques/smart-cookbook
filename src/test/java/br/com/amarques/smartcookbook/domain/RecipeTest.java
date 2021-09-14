@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class RecipeTest {
 
     @Test
-    void shouldCreateRecipe() {
+    void should_create_rSecipe() {
         final var recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Test name");
@@ -24,4 +24,5 @@ class RecipeTest {
         assertThat(recipe.getName(), is(equalTo("Test name")));
         assertThat(recipe.getWayOfDoing(), is(equalTo("Way of doing test")));
     }
+
 }

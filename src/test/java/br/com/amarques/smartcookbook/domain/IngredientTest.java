@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class IngredientTest {
 
     @Test
-    void shouldCreateIngredient() {
+    void should_create_ingredient() {
         final var recipe = new Recipe();
 
         final var riceIngredient = new Ingredient(recipe);
@@ -36,4 +36,5 @@ class IngredientTest {
         assertThat(garlicIngredient.getName(), is(equalTo("Garlic")));
         assertThat(garlicIngredient.getRecipe(), is(equalTo(recipe)));
     }
+
 }

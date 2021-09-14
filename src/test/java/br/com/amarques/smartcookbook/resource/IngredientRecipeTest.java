@@ -9,6 +9,8 @@ import br.com.amarques.smartcookbook.mapper.IngredientMapper;
 import br.com.amarques.smartcookbook.service.IngredientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,19 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = IngredientResource.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class IngredientRecipeTest {
 
     @Autowired
@@ -52,11 +60,11 @@ class IngredientRecipeTest {
         final var mvcResult = mockMvc.perform(post("/api/recipes/{recipeId}/ingredients", recipeId)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(ingredientDTO)))
-                .andExpect(status().isCreated())
-                .andReturn();
+            .andExpect(status().isCreated())
+            .andReturn();
 
         final var simpleEntityDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                SimpleEntityDTO.class);
+            SimpleEntityDTO.class);
 
         assertNotNull(simpleEntityDTO);
         assertThat(simpleEntityDTO.id, is(equalTo(recipeId)));
@@ -74,11 +82,11 @@ class IngredientRecipeTest {
 
         final var mvcResult = mockMvc.perform(get("/api/recipes/{recipeId}/ingredients/{ingredientId}",
                 recipeId, ingredientId))
-                .andExpect(status().isOk())
-                .andReturn();
+            .andExpect(status().isOk())
+            .andReturn();
 
         final var ingredientDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                IngredientDTO.class);
+            IngredientDTO.class);
 
         assertNotNull(ingredientDTO);
         assertThat(ingredientDTO.id, is(equalTo(ingredientId)));
@@ -93,14 +101,14 @@ class IngredientRecipeTest {
         ingredient.setId(ingredientId);
 
         when(ingredientService.getAll(recipeId)).thenReturn(List.of(IngredientMapper.toDTO(ingredient),
-                IngredientMapper.toDTO(ingredient)));
+            IngredientMapper.toDTO(ingredient)));
 
         final var mvcResult = mockMvc.perform(get("/api/recipes/{recipeId}/ingredients", recipeId))
-                .andExpect(status().isOk())
-                .andReturn();
+            .andExpect(status().isOk())
+            .andReturn();
 
         final List<IngredientDTO> ingredientesDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, IngredientDTO.class));
+            TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, IngredientDTO.class));
 
         assertNotNull(ingredientesDTO);
         assertThat(ingredientesDTO.size(), is(equalTo(2)));
@@ -115,7 +123,7 @@ class IngredientRecipeTest {
         mockMvc.perform(put("/api/recipes/{recipeId}/ingredients/{ingredientId}", recipeId, ingredientId)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(ingredientService, times(1)).update(recipeId, ingredientId, dto);
     }
@@ -127,8 +135,9 @@ class IngredientRecipeTest {
 
         mockMvc.perform(delete("/api/recipes/{recipeId}/ingredients/{ingredientId}", recipeId, ingredientId)
                 .contentType(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(ingredientService, times(1)).delete(recipeId, ingredientId);
     }
+
 }
