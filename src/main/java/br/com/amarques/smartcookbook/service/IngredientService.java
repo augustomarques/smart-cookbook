@@ -1,9 +1,9 @@
 package br.com.amarques.smartcookbook.service;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
-import br.com.amarques.smartcookbook.dto.IngredientDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.IngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateIngredientDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.IngredientMapper;
 import br.com.amarques.smartcookbook.repository.IngredientRepository;
@@ -48,7 +48,7 @@ public class IngredientService {
 
     private Ingredient getByIdAndRecipeId(final Long id, final Long recipeId) {
         return repository.findByIdAndRecipeId(id, recipeId).orElseThrow(() -> new NotFoundException(MessageFormat.format(
-                "Ingredient [id: {0}] not found for Recipe [id: {1}]", id, recipeId)));
+            "Ingredient [id: {0}] not found for Recipe [id: {1}]", id, recipeId)));
     }
 
     public List<IngredientDTO> getAll(final Long receitaId) {
@@ -65,4 +65,5 @@ public class IngredientService {
     public void delete(final Long recipeId, final Long id) {
         repository.deleteByIdAndRecipeId(id, recipeId);
     }
+
 }

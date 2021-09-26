@@ -1,8 +1,8 @@
 package br.com.amarques.smartcookbook.mapper;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +16,15 @@ public class RecipeMapper {
         return recipe;
     }
 
+    public static Recipe toEntity(final String name, final String wayOfDoing) {
+        var recipe = new Recipe();
+        recipe.setName(name);
+        recipe.setWayOfDoing(wayOfDoing);
+        return recipe;
+    }
+
     public static RecipeDTO toDTO(final Recipe recipe) {
         return new RecipeDTO(recipe.getId(), recipe.getName(), recipe.getWayOfDoing());
     }
+
 }

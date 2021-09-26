@@ -2,7 +2,7 @@ package br.com.amarques.smartcookbook.mapper;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateIngredientDTO;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

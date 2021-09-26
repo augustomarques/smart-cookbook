@@ -1,8 +1,8 @@
 package br.com.amarques.smartcookbook.service;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.exception.FindByIngredientsException;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.repository.IngredientRepository;

@@ -1,9 +1,9 @@
 package br.com.amarques.smartcookbook.service;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.exception.FindByIngredientsException;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.RecipeMapper;
@@ -42,7 +42,7 @@ public class RecipeService {
 
     protected Recipe findById(final Long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(MessageFormat.format(
-                "Recipe [id: {0}] not found", id)));
+            "Recipe [id: {0}] not found", id)));
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class RecipeService {
     public List<RecipeDTO> getAll(final Pageable pageable) {
         final var recipes = repository.findAll(pageable);
 
-        if(!recipes.hasContent()) {
+        if (!recipes.hasContent()) {
             return List.of();
         }
 
@@ -71,7 +71,7 @@ public class RecipeService {
     }
 
     public List<RecipeDTO> findByIngredients(final List<String> ingredients) {
-        if(CollectionUtils.isEmpty(ingredients)) {
+        if (CollectionUtils.isEmpty(ingredients)) {
             throw new FindByIngredientsException("It is necessary to inform at least one Ingredient");
         }
 
@@ -88,15 +88,16 @@ public class RecipeService {
     private static String buildIngredientsParameterRegex(final List<String> ingredients) {
         final var query = new StringBuilder();
 
-        for(int i = 0; i < ingredients.size(); i++) {
+        for (int i = 0; i < ingredients.size(); i++) {
             final var ingredient = ingredients.get(i);
             query.append(ingredient);
 
-            if(i < (ingredients.size() - 1)) {
+            if (i < (ingredients.size() - 1)) {
                 query.append("|");
             }
         }
 
         return query.toString();
     }
+
 }

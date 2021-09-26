@@ -1,8 +1,8 @@
 package br.com.amarques.smartcookbook.resource;
 
-import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -48,7 +56,7 @@ public class RecipeResource {
     @PutMapping("/{id}")
     @Operation(summary = "Change a registered Recipe")
     public ResponseEntity<Void> update(@PathVariable final Long id,
-                                       @Valid @RequestBody final CreateUpdateRecipeDTO receitaDTO) {
+        @Valid @RequestBody final CreateUpdateRecipeDTO receitaDTO) {
         log.info(String.format("REST request to update an Recipe [id: %s] [dto: %s]", id, receitaDTO));
 
         service.update(id, receitaDTO);
@@ -59,7 +67,7 @@ public class RecipeResource {
     @GetMapping
     @Operation(summary = "Search all recipes")
     public ResponseEntity<List<RecipeDTO>> gelAll(@RequestParam(value = "page", defaultValue = "0", required = false) final int page,
-                                                  @RequestParam(value = "size", defaultValue = "10", required = false) final int size) {
+        @RequestParam(value = "size", defaultValue = "10", required = false) final int size) {
         log.info(String.format("REST request to gel all Recipes [Page: %d  - Size: %d]", page, size));
 
         final var recipes = service.getAll(PageRequest.of(page, size));
@@ -86,4 +94,5 @@ public class RecipeResource {
 
         return ResponseEntity.ok().body(recipes);
     }
+
 }

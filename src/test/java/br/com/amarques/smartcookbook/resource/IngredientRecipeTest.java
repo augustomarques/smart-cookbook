@@ -2,9 +2,9 @@ package br.com.amarques.smartcookbook.resource;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.IngredientDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.IngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateIngredientDTO;
 import br.com.amarques.smartcookbook.mapper.IngredientMapper;
 import br.com.amarques.smartcookbook.service.IngredientService;
 import com.fasterxml.jackson.databind.ObjectMapper;

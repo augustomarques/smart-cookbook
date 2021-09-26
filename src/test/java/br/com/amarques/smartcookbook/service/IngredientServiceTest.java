@@ -2,7 +2,7 @@ package br.com.amarques.smartcookbook.service;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateIngredientDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.repository.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
