@@ -3,7 +3,10 @@ package br.com.amarques.smartcookbook.resource;
 import br.com.amarques.smartcookbook.dto.IngredientDTO;
 import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
-import br.com.amarques.smartcookbook.service.IngredientService;
+import br.com.amarques.smartcookbook.usecase.ingredient.CreateIngredientUseCase;
+import br.com.amarques.smartcookbook.usecase.ingredient.DeleteIngredientUseCase;
+import br.com.amarques.smartcookbook.usecase.ingredient.GetIngredientUseCase;
+import br.com.amarques.smartcookbook.usecase.ingredient.UpdateIngredientUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +25,18 @@ import java.util.List;
 @RequestMapping("/api/recipes/{recipeId}/ingredients")
 public class IngredientResource {
 
-    private final IngredientService service;
+    private final CreateIngredientUseCase createIngredientUseCase;
+    private final UpdateIngredientUseCase updateIngredientUseCase;
+    private final GetIngredientUseCase getIngredientUseCase;
+    private final DeleteIngredientUseCase deleteIngredientUseCase;
 
     @PostMapping
     @Operation(summary = "Register a new Ingredient in a Recipe")
     public ResponseEntity<SimpleEntityDTO> create(@PathVariable final Long recipeId,
                                                   @Valid @RequestBody final CreateUpdateIngredientDTO ingredientDTO) {
-        log.info(String.format("REST request to create a new Ingredient [dto: %s] in the Recipe [id: %s]",
-                ingredientDTO, recipeId));
+        log.info("REST request to create a new Ingredient [dto: {}] in the Recipe [id: {}]", ingredientDTO, recipeId);
 
-        final var simpleEntityDTO = service.create(recipeId, ingredientDTO);
+        final var simpleEntityDTO = createIngredientUseCase.create(recipeId, ingredientDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(simpleEntityDTO);
     }
@@ -39,9 +44,9 @@ public class IngredientResource {
     @GetMapping("/{id}")
     @Operation(summary = "Search for an Ingredient from a Recipe")
     public ResponseEntity<IngredientDTO> get(@PathVariable final Long recipeId, @PathVariable final Long id) {
-        log.info(String.format("REST request to get an Ingredient [id: %s] from Recipe [id: %s]", id, recipeId));
+        log.info("REST request to get an Ingredient [id: {}] from Recipe [id: {}]", id, recipeId);
 
-        final var ingredientDTO = service.get(recipeId, id);
+        final var ingredientDTO = getIngredientUseCase.get(recipeId, id);
 
         return ResponseEntity.ok(ingredientDTO);
     }
@@ -50,10 +55,10 @@ public class IngredientResource {
     @Operation(summary = "Change the Ingredient of a Recipe")
     public ResponseEntity<Void> update(@PathVariable final Long recipeId, @PathVariable final Long id,
                                        @Valid @RequestBody final CreateUpdateIngredientDTO ingredientDTO) {
-        log.info(String.format("REST request to update an Ingredient [id: %s] [dto: %s] from Recipe [id: %s]",
-                id, ingredientDTO, recipeId));
+        log.info("REST request to update an Ingredient [id: {}] [dto: {}] from Recipe [id: {}]",
+                id, ingredientDTO, recipeId);
 
-        service.update(recipeId, id, ingredientDTO);
+        updateIngredientUseCase.update(recipeId, id, ingredientDTO);
 
         return ResponseEntity.ok().build();
     }
@@ -61,9 +66,9 @@ public class IngredientResource {
     @GetMapping
     @Operation(summary = "Search all Ingredients of a Recipe")
     public ResponseEntity<List<IngredientDTO>> gelAll(@PathVariable final Long recipeId) {
-        log.info(String.format("REST request to gel all Ingredients of the Recipe [id: %s]", recipeId));
+        log.info("REST request to gel all Ingredients of the Recipe [id: {}]", recipeId);
 
-        final var ingredients = service.getAll(recipeId);
+        final var ingredients = getIngredientUseCase.getAll(recipeId);
 
         return ResponseEntity.ok().body(ingredients);
     }
@@ -71,9 +76,9 @@ public class IngredientResource {
     @DeleteMapping("/{id}")
     @Operation(summary = "Remove Ingredient from a Recipe")
     public ResponseEntity<Void> delete(@PathVariable final Long recipeId, @PathVariable final Long id) {
-        log.info(String.format("REST request do delete a Ingredient [id: %s] from Recipe [id: %s]", id, recipeId));
+        log.info("REST request do delete a Ingredient [id: {}] from Recipe [id: {}]", id, recipeId);
 
-        service.delete(recipeId, id);
+        deleteIngredientUseCase.delete(recipeId, id);
 
         return ResponseEntity.ok().build();
     }

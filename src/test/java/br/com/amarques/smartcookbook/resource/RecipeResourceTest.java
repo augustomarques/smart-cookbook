@@ -5,9 +5,14 @@ import br.com.amarques.smartcookbook.dto.RecipeDTO;
 import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
 import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.mapper.RecipeMapper;
-import br.com.amarques.smartcookbook.service.RecipeService;
+import br.com.amarques.smartcookbook.usecase.recipe.CreateRecipeUseCase;
+import br.com.amarques.smartcookbook.usecase.recipe.DeleteRecipeUseCase;
+import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
+import br.com.amarques.smartcookbook.usecase.recipe.UpdateRecipeUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +30,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = RecipeResource.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class RecipeResourceTest {
 
     @Autowired
@@ -41,7 +48,13 @@ class RecipeResourceTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private RecipeService recipeService;
+    private CreateRecipeUseCase createRecipeUseCase;
+    @MockBean
+    private UpdateRecipeUseCase updateRecipeUseCase;
+    @MockBean
+    private GetRecipeUseCase getRecipeUseCase;
+    @MockBean
+    private DeleteRecipeUseCase deleteRecipeUseCase;
 
     @Test
     void should_return_all_recipes_registered() throws Exception {
@@ -51,7 +64,7 @@ class RecipeResourceTest {
         final var recipe2 = new Recipe();
         recipe2.setId(2L);
 
-        when(recipeService.getAll(PageRequest.of(0, 10))).thenReturn(List.of(RecipeMapper.toDTO(recipe1),
+        when(getRecipeUseCase.getAll(PageRequest.of(0, 10))).thenReturn(List.of(RecipeMapper.toDTO(recipe1),
                 RecipeMapper.toDTO(recipe2)));
 
         final var mvcResult = mockMvc.perform(get("/api/recipes"))
@@ -71,7 +84,7 @@ class RecipeResourceTest {
         final var recipe1 = new Recipe();
         recipe1.setId(id);
 
-        when(recipeService.get(id)).thenReturn(RecipeMapper.toDTO(recipe1));
+        when(getRecipeUseCase.get(id)).thenReturn(RecipeMapper.toDTO(recipe1));
 
         final var mvcResult = mockMvc.perform(get("/api/recipes/{id}", 1L))
                 .andExpect(status().isOk())
@@ -87,7 +100,7 @@ class RecipeResourceTest {
     void should_create() throws Exception {
         final var id = 222L;
         final var recipeDTO = new CreateUpdateRecipeDTO("White Rice", "Rice preparation mode");
-        when(recipeService.create(recipeDTO)).thenReturn(new SimpleEntityDTO(id));
+        when(createRecipeUseCase.create(recipeDTO)).thenReturn(new SimpleEntityDTO(id));
 
         final var mvcResult = mockMvc.perform(post("/api/recipes")
                 .contentType(APPLICATION_JSON_VALUE)
@@ -112,7 +125,7 @@ class RecipeResourceTest {
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
-        verify(recipeService, times(1)).update(id, dto);
+        verify(updateRecipeUseCase).update(id, dto);
     }
 
     @Test
@@ -120,9 +133,9 @@ class RecipeResourceTest {
         final var riceRecipe = new RecipeDTO(111L, "Rice", "way to cook white rice");
         final var beanRecipe = new RecipeDTO(222L, "Beans", "way to cook white beans");
 
-        when(recipeService.findByIngredients(List.of("Ingredient1", "Ingredient2"))).thenReturn(List.of(riceRecipe, beanRecipe));
+        when(getRecipeUseCase.findByIngredients(List.of("Ingredient1", "Ingredient2"))).thenReturn(List.of(riceRecipe, beanRecipe));
 
-        final var mvcResult = mockMvc.perform(get("/api/recipes/search?ingredients=Ingrediente1,Ingrediente2"))
+        final var mvcResult = mockMvc.perform(get("/api/recipes/search?ingredients=Ingredient1,Ingredient2"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -131,5 +144,16 @@ class RecipeResourceTest {
 
         assertNotNull(recipes);
         assertThat(recipes.size(), is(equalTo(2)));
+    }
+
+    @Test
+    void should_delete() throws Exception {
+        final var recipeId = 123L;
+
+        mockMvc.perform(delete("/api/recipes/{recipeId}", recipeId)
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+        verify(deleteRecipeUseCase).delete(recipeId);
     }
 }

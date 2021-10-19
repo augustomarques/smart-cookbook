@@ -1,73 +1,43 @@
-package br.com.amarques.smartcookbook.service;
+package br.com.amarques.smartcookbook.usecase.recipe;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
 import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.exception.FindByIngredientsException;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.RecipeMapper;
-import br.com.amarques.smartcookbook.repository.IngredientRepository;
 import br.com.amarques.smartcookbook.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RecipeService {
+public class GetRecipeUseCase {
 
-    private final RecipeRepository repository;
-    private final IngredientRepository ingredientRepository;
-
-    @Transactional
-    public SimpleEntityDTO create(final CreateUpdateRecipeDTO receitaDTO) {
-        final var recipe = RecipeMapper.toEntity(receitaDTO);
-        repository.save(recipe);
-
-        return new SimpleEntityDTO(recipe.getId());
-    }
+    private final RecipeRepository recipeRepository;
 
     public RecipeDTO get(final Long id) {
         final var recipe = findById(id);
         return RecipeMapper.toDTO(recipe);
     }
 
-    protected Recipe findById(final Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(MessageFormat.format(
-                "Recipe [id: {0}] not found", id)));
-    }
-
-    @Transactional
-    public void update(final Long id, final CreateUpdateRecipeDTO recipeDTO) {
-        final var recipe = findById(id);
-        recipe.setName(recipeDTO.name);
-        recipe.setWayOfDoing(recipeDTO.wayOfDoing);
-
-        repository.save(recipe);
+    public Recipe findById(final Long id) {
+        return recipeRepository.findById(id).orElseThrow(() -> new NotFoundException(
+                String.format("Recipe [id: %d] not found", id)));
     }
 
     public List<RecipeDTO> getAll(final Pageable pageable) {
-        final var recipes = repository.findAll(pageable);
+        final var recipes = recipeRepository.findAll(pageable);
 
         if(!recipes.hasContent()) {
             return List.of();
         }
 
         return recipes.stream().map(RecipeMapper::toDTO).collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void delete(final Long id) {
-        ingredientRepository.deleteByRecipeId(id);
-        repository.deleteById(id);
     }
 
     public List<RecipeDTO> findByIngredients(final List<String> ingredients) {
@@ -77,7 +47,7 @@ public class RecipeService {
 
         final var queryParameters = buildIngredientsParameterRegex(ingredients);
 
-        final var recipes = repository.findAllByIngredients(queryParameters);
+        final var recipes = recipeRepository.findAllByIngredients(queryParameters);
         if (CollectionUtils.isEmpty(recipes)) {
             return List.of();
         }

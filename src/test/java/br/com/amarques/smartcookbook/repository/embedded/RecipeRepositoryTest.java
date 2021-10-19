@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class RecipeRepositoryTest extends EmbeddedRepositoryTestIT {
@@ -48,9 +45,9 @@ class RecipeRepositoryTest extends EmbeddedRepositoryTestIT {
         entityManager.persist(beanIngredient);
 
         final var recipesThatHaveRice = recipeRepository.findAllByIngredients("Rice");
-        assertNotNull(recipesThatHaveRice);
-        assertThat(recipesThatHaveRice.size(), is(equalTo(1)));
-        assertThat(recipesThatHaveRice.get(0).getName(), is(equalTo("White Rice")));
+
+        assertThat(recipesThatHaveRice).hasSize(1);
+        assertThat(recipesThatHaveRice.get(0).getName()).isEqualTo("White Rice");
     }
 
     @Test
@@ -78,9 +75,9 @@ class RecipeRepositoryTest extends EmbeddedRepositoryTestIT {
         entityManager.persist(beanIngredient);
 
         final var recipesThatHaveRiceOrBeans = recipeRepository.findAllByIngredients("Rice|Beans");
-        assertNotNull(recipesThatHaveRiceOrBeans);
-        assertThat(recipesThatHaveRiceOrBeans.size(), is(equalTo(2)));
-        assertThat(recipesThatHaveRiceOrBeans.get(0).getName(), is(equalTo("White Rice")));
-        assertThat(recipesThatHaveRiceOrBeans.get(1).getName(), is(equalTo("Beans")));
+
+        assertThat(recipesThatHaveRiceOrBeans).hasSize(2);
+        assertThat(recipesThatHaveRiceOrBeans.get(0).getName()).isEqualTo("White Rice");
+        assertThat(recipesThatHaveRiceOrBeans.get(1).getName()).isEqualTo("Beans");
     }
 }

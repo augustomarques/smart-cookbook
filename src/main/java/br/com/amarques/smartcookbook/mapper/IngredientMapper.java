@@ -11,8 +11,12 @@ import lombok.NoArgsConstructor;
 public class IngredientMapper {
 
     public static Ingredient toEntity(final CreateUpdateIngredientDTO dto, final Recipe recipe) {
+        return toEntity(dto.name, recipe);
+    }
+
+    public static Ingredient toEntity(final String name, final Recipe recipe) {
         final var ingredient = new Ingredient(recipe);
-        ingredient.setName(dto.name);
+        ingredient.setName(name);
         return ingredient;
     }
 

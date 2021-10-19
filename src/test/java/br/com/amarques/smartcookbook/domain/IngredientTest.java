@@ -4,16 +4,14 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class IngredientTest {
 
     @Test
-    void shouldCreateIngredient() {
+    void should_create_ingredient() {
         final var recipe = new Recipe();
 
         final var riceIngredient = new Ingredient(recipe);
@@ -28,12 +26,12 @@ class IngredientTest {
         assertNotNull(riceIngredient);
         assertNotNull(garlicIngredient);
 
-        assertThat(riceIngredient.getId(), is(equalTo(1L)));
-        assertThat(riceIngredient.getName(), is(equalTo("Rice")));
-        assertThat(riceIngredient.getRecipe(), is(equalTo(recipe)));
+        assertThat(riceIngredient.getId()).isEqualTo(1L);
+        assertThat(riceIngredient.getName()).isEqualTo("Rice");
+        assertThat(riceIngredient.getRecipe()).isEqualTo(recipe);
 
-        assertThat(garlicIngredient.getId(), is(equalTo(2L)));
-        assertThat(garlicIngredient.getName(), is(equalTo("Garlic")));
-        assertThat(garlicIngredient.getRecipe(), is(equalTo(recipe)));
+        assertThat(garlicIngredient.getId()).isEqualTo(2L);
+        assertThat(garlicIngredient.getName()).isEqualTo("Garlic");
+        assertThat(garlicIngredient.getRecipe()).isEqualTo(recipe);
     }
 }

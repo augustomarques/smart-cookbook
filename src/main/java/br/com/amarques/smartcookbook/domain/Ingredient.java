@@ -1,9 +1,6 @@
 package br.com.amarques.smartcookbook.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +8,8 @@ import java.io.Serializable;
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @Entity
 @Table(name = "ingredients")
@@ -29,13 +28,5 @@ public class Ingredient implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "recipe_id", updatable = false)
     private final Recipe recipe;
-
-    protected Ingredient() {
-        this.recipe = null;
-    }
-
-    public Ingredient(Recipe recipe) {
-        this.recipe = recipe;
-    }
 
 }

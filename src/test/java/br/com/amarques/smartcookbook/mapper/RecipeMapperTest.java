@@ -6,9 +6,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -23,8 +21,8 @@ class RecipeMapperTest {
 
         assertNotNull(recipe);
         assertNull(recipe.getId());
-        assertThat(recipe.getName(), is(equalTo(dto.name)));
-        assertThat(recipe.getWayOfDoing(), is(equalTo(dto.wayOfDoing)));
+        assertThat(recipe.getName()).isEqualTo(dto.name);
+        assertThat(recipe.getWayOfDoing()).isEqualTo(dto.wayOfDoing);
     }
 
     @Test
@@ -37,8 +35,8 @@ class RecipeMapperTest {
         final var recipeDTO = RecipeMapper.toDTO(recipe);
 
         assertNotNull(recipeDTO);
-        assertThat(recipeDTO.id, is(equalTo(recipe.getId())));
-        assertThat(recipeDTO.name, is(equalTo(recipe.getName())));
-        assertThat(recipeDTO.wayOfDoing, is(equalTo(recipe.getWayOfDoing())));
+        assertThat(recipeDTO.id).isEqualTo(recipe.getId());
+        assertThat(recipeDTO.name).isEqualTo(recipe.getName());
+        assertThat(recipeDTO.wayOfDoing).isEqualTo(recipe.getWayOfDoing());
     }
 }

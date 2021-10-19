@@ -16,6 +16,13 @@ public class RecipeMapper {
         return recipe;
     }
 
+    public static Recipe toEntity(final String name, final String wayOfDoing) {
+        var recipe = new Recipe();
+        recipe.setName(name);
+        recipe.setWayOfDoing(wayOfDoing);
+        return recipe;
+    }
+
     public static RecipeDTO toDTO(final Recipe recipe) {
         return new RecipeDTO(recipe.getId(), recipe.getName(), recipe.getWayOfDoing());
     }

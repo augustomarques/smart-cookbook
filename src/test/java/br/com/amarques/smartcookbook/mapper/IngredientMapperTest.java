@@ -7,9 +7,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -20,13 +18,12 @@ class IngredientMapperTest {
     void should_convert_dto_to_entity() {
         final var dto = new CreateUpdateIngredientDTO("Rice");
         final var recipe = new Recipe();
-
         final var ingredient = IngredientMapper.toEntity(dto, recipe);
 
         assertNotNull(ingredient);
         assertNull(ingredient.getId());
-        assertThat(ingredient.getName(), is(equalTo(dto.name)));
-        assertThat(ingredient.getRecipe(), is(equalTo(recipe)));
+        assertThat(ingredient.getName()).isEqualTo(dto.name);
+        assertThat(ingredient.getRecipe()).isEqualTo(recipe);
     }
 
     @Test
@@ -39,7 +36,7 @@ class IngredientMapperTest {
         final var ingredientDTO = IngredientMapper.toDTO(ingredient);
 
         assertNotNull(ingredientDTO);
-        assertThat(ingredientDTO.id, is(equalTo(ingredient.getId())));
-        assertThat(ingredientDTO.name, is(equalTo(ingredient.getName())));
+        assertThat(ingredientDTO.id).isEqualTo(ingredient.getId());
+        assertThat(ingredientDTO.name).isEqualTo(ingredient.getName());
     }
 }
