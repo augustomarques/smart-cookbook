@@ -15,4 +15,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             "WHERE i.name REGEXP ?1 " +
             "GROUP BY r.id", nativeQuery = true)
     List<Recipe> findAllByIngredients(String queryParameters);
+
 }

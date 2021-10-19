@@ -1,4 +1,4 @@
-package br.com.amarques.smartcookbook.dto;
+package br.com.amarques.smartcookbook.dto.rest;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

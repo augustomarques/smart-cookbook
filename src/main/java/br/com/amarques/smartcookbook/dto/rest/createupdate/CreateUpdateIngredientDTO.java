@@ -1,6 +1,10 @@
-package br.com.amarques.smartcookbook.dto.createupdate;
+package br.com.amarques.smartcookbook.dto.rest.createupdate;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 

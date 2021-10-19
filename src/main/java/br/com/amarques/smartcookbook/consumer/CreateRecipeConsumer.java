@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class CreateRecipeConsumer {
 
@@ -19,8 +21,7 @@ public class CreateRecipeConsumer {
         createRecipeUseCase.create(message.getPayload());
     }
 
-    @Bean
-    public Consumer<Message<CreateRecipeMessageDTO>> saveReceitaEvent() {
-        return message -> handler(message);
+        createRecipeService.create(name, createRecipeMessageDTO);
     }
+
 }

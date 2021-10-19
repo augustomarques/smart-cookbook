@@ -2,9 +2,9 @@ package br.com.amarques.smartcookbook.resource;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.IngredientDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.IngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateIngredientDTO;
 import br.com.amarques.smartcookbook.mapper.IngredientMapper;
 import br.com.amarques.smartcookbook.usecase.ingredient.CreateIngredientUseCase;
 import br.com.amarques.smartcookbook.usecase.ingredient.DeleteIngredientUseCase;
@@ -32,7 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -66,11 +69,11 @@ class IngredientRecipeTest {
         final var mvcResult = mockMvc.perform(post("/api/recipes/{recipeId}/ingredients", recipeId)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(ingredientDTO)))
-                .andExpect(status().isCreated())
-                .andReturn();
+            .andExpect(status().isCreated())
+            .andReturn();
 
         final var simpleEntityDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                SimpleEntityDTO.class);
+            SimpleEntityDTO.class);
 
         assertNotNull(simpleEntityDTO);
         assertThat(simpleEntityDTO.id, is(equalTo(recipeId)));
@@ -87,11 +90,11 @@ class IngredientRecipeTest {
 
         final var mvcResult = mockMvc.perform(get("/api/recipes/{recipeId}/ingredients/{ingredientId}",
                 recipeId, ingredientId))
-                .andExpect(status().isOk())
-                .andReturn();
+            .andExpect(status().isOk())
+            .andReturn();
 
         final var ingredientDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                IngredientDTO.class);
+            IngredientDTO.class);
 
         assertNotNull(ingredientDTO);
         assertThat(ingredientDTO.id, is(equalTo(ingredientId)));
@@ -108,8 +111,8 @@ class IngredientRecipeTest {
                 IngredientMapper.toDTO(ingredient)));
 
         final var mvcResult = mockMvc.perform(get("/api/recipes/{recipeId}/ingredients", recipeId))
-                .andExpect(status().isOk())
-                .andReturn();
+            .andExpect(status().isOk())
+            .andReturn();
 
         final List<IngredientDTO> ingredientsDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
                 TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, IngredientDTO.class));
@@ -127,7 +130,7 @@ class IngredientRecipeTest {
         mockMvc.perform(put("/api/recipes/{recipeId}/ingredients/{ingredientId}", recipeId, ingredientId)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(updateIngredientUseCase).update(recipeId, ingredientId, dto);
     }
@@ -139,8 +142,9 @@ class IngredientRecipeTest {
 
         mockMvc.perform(delete("/api/recipes/{recipeId}/ingredients/{ingredientId}", recipeId, ingredientId)
                 .contentType(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(deleteIngredientUseCase).delete(recipeId, ingredientId);
     }
+
 }

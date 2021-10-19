@@ -1,7 +1,7 @@
 package br.com.amarques.smartcookbook.mapper;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

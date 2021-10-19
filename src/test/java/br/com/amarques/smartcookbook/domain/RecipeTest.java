@@ -22,4 +22,5 @@ class RecipeTest {
         assertThat(recipe.getName()).isEqualTo("Test name");
         assertThat(recipe.getWayOfDoing()).isEqualTo("Way of doing test");
     }
+
 }

@@ -33,7 +33,7 @@ public class GetRecipeUseCase {
     public List<RecipeDTO> getAll(final Pageable pageable) {
         final var recipes = recipeRepository.findAll(pageable);
 
-        if(!recipes.hasContent()) {
+        if (!recipes.hasContent()) {
             return List.of();
         }
 
@@ -41,7 +41,7 @@ public class GetRecipeUseCase {
     }
 
     public List<RecipeDTO> findByIngredients(final List<String> ingredients) {
-        if(CollectionUtils.isEmpty(ingredients)) {
+        if (CollectionUtils.isEmpty(ingredients)) {
             throw new FindByIngredientsException("It is necessary to inform at least one Ingredient");
         }
 
@@ -58,15 +58,16 @@ public class GetRecipeUseCase {
     private static String buildIngredientsParameterRegex(final List<String> ingredients) {
         final var query = new StringBuilder();
 
-        for(int i = 0; i < ingredients.size(); i++) {
+        for (int i = 0; i < ingredients.size(); i++) {
             final var ingredient = ingredients.get(i);
             query.append(ingredient);
 
-            if(i < (ingredients.size() - 1)) {
+            if (i < (ingredients.size() - 1)) {
                 query.append("|");
             }
         }
 
         return query.toString();
     }
+
 }

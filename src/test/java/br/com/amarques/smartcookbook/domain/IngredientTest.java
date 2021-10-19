@@ -34,4 +34,5 @@ class IngredientTest {
         assertThat(garlicIngredient.getName()).isEqualTo("Garlic");
         assertThat(garlicIngredient.getRecipe()).isEqualTo(recipe);
     }
+
 }

@@ -1,9 +1,9 @@
 package br.com.amarques.smartcookbook.resource;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.mapper.RecipeMapper;
 import br.com.amarques.smartcookbook.usecase.recipe.CreateRecipeUseCase;
 import br.com.amarques.smartcookbook.usecase.recipe.DeleteRecipeUseCase;
@@ -33,7 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -68,11 +70,11 @@ class RecipeResourceTest {
                 RecipeMapper.toDTO(recipe2)));
 
         final var mvcResult = mockMvc.perform(get("/api/recipes"))
-                .andExpect(status().isOk())
-                .andReturn();
+            .andExpect(status().isOk())
+            .andReturn();
 
         final List<RecipeDTO> recipes = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, RecipeDTO.class));
+            TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, RecipeDTO.class));
 
         assertNotNull(recipes);
         assertEquals(2, recipes.size());
@@ -87,8 +89,8 @@ class RecipeResourceTest {
         when(getRecipeUseCase.get(id)).thenReturn(RecipeMapper.toDTO(recipe1));
 
         final var mvcResult = mockMvc.perform(get("/api/recipes/{id}", 1L))
-                .andExpect(status().isOk())
-                .andReturn();
+            .andExpect(status().isOk())
+            .andReturn();
 
         final var recipe = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), RecipeDTO.class);
 
@@ -105,11 +107,11 @@ class RecipeResourceTest {
         final var mvcResult = mockMvc.perform(post("/api/recipes")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(recipeDTO)))
-                .andExpect(status().isCreated())
-                .andReturn();
+            .andExpect(status().isCreated())
+            .andReturn();
 
         final var simpleEntityDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                SimpleEntityDTO.class);
+            SimpleEntityDTO.class);
 
         assertNotNull(simpleEntityDTO);
         assertThat(simpleEntityDTO.id, is(equalTo(id)));
@@ -123,7 +125,7 @@ class RecipeResourceTest {
         mockMvc.perform(put("/api/recipes/{id}", id)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(updateRecipeUseCase).update(id, dto);
     }
@@ -140,7 +142,7 @@ class RecipeResourceTest {
                 .andReturn();
 
         final List<RecipeDTO> recipes = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, RecipeDTO.class));
+            TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, RecipeDTO.class));
 
         assertNotNull(recipes);
         assertThat(recipes.size(), is(equalTo(2)));
