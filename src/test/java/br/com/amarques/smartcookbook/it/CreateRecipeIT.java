@@ -2,10 +2,10 @@ package br.com.amarques.smartcookbook.it;
 
 import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
 import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
-import br.com.amarques.smartcookbook.service.IngredientService;
-import br.com.amarques.smartcookbook.service.RecipeService;
+import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +24,14 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Slf4j
+@Disabled
 public class CreateRecipeIT extends BaseIT {
 
     @Value("${spring.cloud.stream.bindings.saveRecipeEvent-in-0.destination}")
     private String saveRecipeEventTopic;
 
     @Autowired
-    private RecipeService recipeService;
-
-    @Autowired
-    private IngredientService ingredientService;
+    private GetRecipeUseCase getRecipeUseCase;
 
     @Autowired
     private StreamBridge streamBridge;
@@ -43,7 +41,7 @@ public class CreateRecipeIT extends BaseIT {
         final var name = "White Rice";
         final var wayOfDoing = "Add water and rice...";
         final var ingredients = List.of("Rice", "Garlic", "Water");
-        final var createRecipeMessageDTO = new CreateRecipeMessageDTO(wayOfDoing, ingredients);
+        final var createRecipeMessageDTO = new CreateRecipeMessageDTO(name, wayOfDoing, ingredients);
         final var jsonMessage = new ObjectMapper().writeValueAsString(createRecipeMessageDTO);
 
         final Map<String, Object> headers = new HashMap<>();
@@ -59,7 +57,7 @@ public class CreateRecipeIT extends BaseIT {
         await().atMost(Duration.ofSeconds(10)).pollInterval(Duration.ofSeconds(1)).untilAsserted(() -> {
             log.info("Waiting for consumer to receive the message and process...");
 
-            final List<RecipeDTO> recipes = recipeService.getAll(PageRequest.of(0, 10));
+            final List<RecipeDTO> recipes = getRecipeUseCase.getAll(PageRequest.of(0, 10));
             assertFalse(recipes.isEmpty());
 
             //final List<IngredientDTO> registeredIngredients = ingredientService.getAll(recipes.get(0).id);

@@ -20,12 +20,6 @@ public class IngredientMapper {
         return ingredient;
     }
 
-    public static Ingredient toEntity(final String name, final Recipe recipe) {
-        final var ingredient = new Ingredient(recipe);
-        ingredient.setName(name);
-        return ingredient;
-    }
-
     public static IngredientDTO toDTO(final Ingredient ingredient) {
         return new IngredientDTO(ingredient.getId(), ingredient.getName());
     }

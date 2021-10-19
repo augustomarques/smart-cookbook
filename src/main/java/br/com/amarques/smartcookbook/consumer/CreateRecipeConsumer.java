@@ -21,7 +21,9 @@ public class CreateRecipeConsumer {
         createRecipeUseCase.create(message.getPayload());
     }
 
-        createRecipeService.create(name, createRecipeMessageDTO);
+    @Bean
+    public Consumer<Message<CreateRecipeMessageDTO>> createRecipeEvent() {
+        return message -> handler(message);
     }
 
 }

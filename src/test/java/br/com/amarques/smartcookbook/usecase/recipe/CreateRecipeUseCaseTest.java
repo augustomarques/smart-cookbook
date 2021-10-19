@@ -1,8 +1,8 @@
 package br.com.amarques.smartcookbook.usecase.recipe;
 
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.repository.RecipeRepository;
 import br.com.amarques.smartcookbook.usecase.ingredient.CreateIngredientUseCase;
 import org.jeasy.random.EasyRandom;

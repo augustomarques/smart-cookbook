@@ -1,7 +1,7 @@
 package br.com.amarques.smartcookbook.usecase.ingredient;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateIngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateIngredientDTO;
 import br.com.amarques.smartcookbook.repository.IngredientRepository;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;

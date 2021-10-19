@@ -1,7 +1,7 @@
 package br.com.amarques.smartcookbook.usecase.ingredient;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
-import br.com.amarques.smartcookbook.dto.IngredientDTO;
+import br.com.amarques.smartcookbook.dto.rest.IngredientDTO;
 import br.com.amarques.smartcookbook.exception.NotFoundException;
 import br.com.amarques.smartcookbook.mapper.IngredientMapper;
 import br.com.amarques.smartcookbook.repository.IngredientRepository;

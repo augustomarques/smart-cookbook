@@ -1,8 +1,8 @@
 package br.com.amarques.smartcookbook.resource;
 
-import br.com.amarques.smartcookbook.dto.RecipeDTO;
-import br.com.amarques.smartcookbook.dto.SimpleEntityDTO;
-import br.com.amarques.smartcookbook.dto.createupdate.CreateUpdateRecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.dto.rest.SimpleEntityDTO;
+import br.com.amarques.smartcookbook.dto.rest.createupdate.CreateUpdateRecipeDTO;
 import br.com.amarques.smartcookbook.usecase.recipe.CreateRecipeUseCase;
 import br.com.amarques.smartcookbook.usecase.recipe.DeleteRecipeUseCase;
 import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
@@ -14,15 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -62,10 +54,10 @@ public class RecipeResource {
     @PutMapping("/{id}")
     @Operation(summary = "Change a registered Recipe")
     public ResponseEntity<Void> update(@PathVariable final Long id,
-                                       @Valid @RequestBody final CreateUpdateRecipeDTO receitaDTO) {
-        log.info("REST request to update an Recipe [id: {}] [dto: {}]", id, receitaDTO);
+                                       @Valid @RequestBody final CreateUpdateRecipeDTO recipeDTO) {
+        log.info("REST request to update an Recipe [id: {}] [dto: {}]", id, recipeDTO);
 
-        updateRecipeUseCase.update(id, receitaDTO);
+        updateRecipeUseCase.update(id, recipeDTO);
 
         return ResponseEntity.ok().build();
     }

@@ -92,7 +92,7 @@ public abstract class BaseIT {
             new StringDeserializer()
         );
 
-        log.info(">>> Overriding Spring Properties for MongoDB and Kafka <<<" + kafka.getBootstrapServers());
+        log.info(">>> Overriding Spring Properties for Kafka <<<" + kafka.getBootstrapServers());
 
         registry.add("spring.cloud.stream.kafka.binder.brokers", kafka::getBootstrapServers);
 

@@ -57,3 +57,14 @@ spring:
                     consumer:
                         maxAttempts: 3
                         concurrency: 1
+
+---
+
+spring:
+    config:
+        activate:
+            on-profile: testcontainer
+    datasource:
+        url: jdbc:tc:mysql:5.7.34://db:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    jpa:
+        show-sql: true
