@@ -17,14 +17,14 @@ public class OpenApiConfig {
         return new OpenAPI().info(new Info()
                 .title("Receitas Inteligentes - Rest APIs")
                 .version("Esta página lista todos os serviços REST da API de Receitas Inteligentes")
-                .description("1.2.0"));
+                .description("1.0.0"));
     }
 
     /**
      * Necessário para que o OpenAPI respeite o snake_case
      */
     @Bean
-    public ModelResolver modelResolver(ObjectMapper objectMapper) {
+    public ModelResolver modelResolver(final ObjectMapper objectMapper) {
         return new ModelResolver(objectMapper);
     }
 }

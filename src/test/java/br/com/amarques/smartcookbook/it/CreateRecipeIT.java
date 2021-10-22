@@ -1,11 +1,12 @@
 package br.com.amarques.smartcookbook.it;
 
-import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
-import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
-import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,17 +16,15 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Disabled
-public class CreateRecipeIT extends BaseIT {
+class CreateRecipeIT extends BaseIT {
 
     @Value("${spring.cloud.stream.bindings.saveRecipeEvent-in-0.destination}")
     private String saveRecipeEventTopic;
@@ -37,17 +36,16 @@ public class CreateRecipeIT extends BaseIT {
     private StreamBridge streamBridge;
 
     @Test
-    public void teste() throws Exception {
+    void teste() throws Exception {
         final var name = "White Rice";
         final var wayOfDoing = "Add water and rice...";
         final var ingredients = List.of("Rice", "Garlic", "Water");
-        final var createRecipeMessageDTO = new CreateRecipeMessageDTO(name, wayOfDoing, ingredients);
+        final var createRecipeMessageDTO = new CreateRecipeMessageDTO(wayOfDoing, ingredients);
         final var jsonMessage = new ObjectMapper().writeValueAsString(createRecipeMessageDTO);
 
-        final Map<String, Object> headers = new HashMap<>();
-        headers.put("name", name);
-        final MessageHeaders messageHeaders = new MessageHeaders(headers);
+        final MessageHeaders messageHeaders = new MessageHeaders(Map.of("name", name));
         final Message<String> message = MessageBuilder.createMessage(jsonMessage, messageHeaders);
+
         streamBridge.send(saveRecipeEventTopic, message);
 
         //final Headers headers = new RecordHeaders();

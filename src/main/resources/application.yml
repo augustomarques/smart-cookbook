@@ -20,20 +20,25 @@ spring:
         stream:
             kafka:
                 binder:
+                    configuration:
+                        retries: 3
+                    brokers: localhost:29092
                     autoAddPartitions: true
                     replication-factor: 1
                     autoCreateTopics: true
+                    producer-properties:
+                        key:
+                            serializer: org.apache.kafka.common.serialization.StringSerializer
                 bindings:
-                    saveReceitaEvent-in-0:
-                        consumer:
-                            enableDlq: true
+                    createReceitaEvent-in-0:
             bindings:
-                saveRecipeEvent-in-0:
+                saveReceitaEvent-in-0:
                     destination: smartcookbook-create-recipe-event
                     group: smartcookbook
                     contentType: application/json
                     consumer:
                         maxAttempts: 3
+                        concurrency: 3
 
 ---
 
@@ -52,15 +57,6 @@ spring:
         password: password
     jpa:
         show-sql: true
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost:9092
-            bindings:
-                saveRecipeEvent-in-0:
-                    consumer:
-                        concurrency: 1
 
 ---
 
@@ -79,15 +75,6 @@ spring:
         password: docker
     jpa:
         show-sql: false
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost:9092
-            bindings:
-                saveRecipeEvent-in-0:
-                    consumer:
-                        concurrency: 1
 
 ---
 
@@ -106,12 +93,3 @@ spring:
         password: ${MYSQL_DB_PASSWORD}
     jpa:
         show-sql: false
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    brokers: ${KAFKA_BROKER}
-            bindings:
-                saveRecipeEvent-in-0:
-                    consumer:
-                        concurrency: 3

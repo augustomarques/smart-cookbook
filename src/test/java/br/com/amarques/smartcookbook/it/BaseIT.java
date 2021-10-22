@@ -1,7 +1,7 @@
 package br.com.amarques.smartcookbook.it;
 
-import br.com.amarques.smartcookbook.SmartCookbookApplication;
-import lombok.extern.slf4j.Slf4j;
+import java.util.UUID;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -23,7 +23,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 import org.testcontainers.utility.DockerImageName;
 
-import java.util.UUID;
+import br.com.amarques.smartcookbook.SmartCookbookApplication;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Testcontainers
@@ -42,7 +43,7 @@ public abstract class BaseIT {
     static final GenericContainer<?> zookeeper = new GenericContainer<>("confluentinc/cp-zookeeper:6.1.1");
 
     @Container
-    static final MySQLContainer mysql = new MySQLContainer<>("mysql:8.0.22");
+    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.22");
 
     public static KafkaProducer<String, String> producer;
     public static KafkaConsumer<String, String> consumer;
@@ -51,46 +52,44 @@ public abstract class BaseIT {
         Network network = Network.SHARED;
 
         zookeeper
-            .withNetwork(network)
-            .withNetworkAliases("zookeeper")
-            .withExposedPorts(2181)
-            .withEnv("ZOOKEEPER_CLIENT_PORT", "2181")
-            .withReuse(REUSE_CONTAINER)
-            .start();
+                .withNetwork(network)
+                .withNetworkAliases("zookeeper")
+                .withExposedPorts(2181)
+                .withEnv("ZOOKEEPER_CLIENT_PORT", "2181")
+                .withReuse(REUSE_CONTAINER)
+                .start();
 
         kafka
-            .withNetwork(network)
-            .withNetworkAliases("kafka")
-            .withExposedPorts(9092, 9093)
-            .withExternalZookeeper("zookeeper:2181")
-            .withReuse(REUSE_CONTAINER)
-            .start();
+                .withNetwork(network)
+                .withNetworkAliases("kafka")
+                .withExposedPorts(9092, 9093)
+                .withExternalZookeeper("zookeeper:2181")
+                .withReuse(REUSE_CONTAINER)
+                .start();
 
         mysql
-            .withNetwork(network)
-            .withNetworkAliases("mysql")
-            .withReuse(REUSE_CONTAINER)
-            .start();
+                .withNetwork(network)
+                .withNetworkAliases("mysql")
+                .withReuse(REUSE_CONTAINER)
+                .start();
     }
 
     @DynamicPropertySource
     public static void dynamicProperties(DynamicPropertyRegistry registry) {
         producer = new KafkaProducer<>(
-            ImmutableMap.of(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString()),
-            new StringSerializer(),
-            new StringSerializer()
-        );
+                ImmutableMap.of(
+                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
+                        ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString()),
+                new StringSerializer(),
+                new StringSerializer());
 
         consumer = new KafkaConsumer<>(
-            ImmutableMap.of(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                ConsumerConfig.GROUP_ID_CONFIG, "smartcookbook",
-                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"),
-            new StringDeserializer(),
-            new StringDeserializer()
-        );
+                ImmutableMap.of(
+                        ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
+                        ConsumerConfig.GROUP_ID_CONFIG, "smartcookbook",
+                        ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"),
+                new StringDeserializer(),
+                new StringDeserializer());
 
         log.info(">>> Overriding Spring Properties for Kafka <<<" + kafka.getBootstrapServers());
 
