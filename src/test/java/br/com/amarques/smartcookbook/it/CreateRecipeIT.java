@@ -1,7 +1,6 @@
 package br.com.amarques.smartcookbook.it;
 
 import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
-import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
 import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,7 @@ class CreateRecipeIT extends BaseIT {
         final var name = "White Rice";
         final var wayOfDoing = "Add water and rice...";
         final var ingredients = List.of("Rice", "Garlic", "Water");
-        final var createRecipeMessageDTO = new CreateRecipeMessageDTO(wayOfDoing, ingredients);
+        final var createRecipeMessageDTO = new CreateRecipeMessageDTO(name, wayOfDoing, ingredients);
         final var jsonMessage = new ObjectMapper().writeValueAsString(createRecipeMessageDTO);
 
         final MessageHeaders messageHeaders = new MessageHeaders(Map.of("name", name));
@@ -46,18 +45,11 @@ class CreateRecipeIT extends BaseIT {
 
         streamBridge.send(saveRecipeEventTopic, message);
 
-        //final Headers headers = new RecordHeaders();
-        //headers.add(new RecordHeader("name", name.getBytes()));
-        //producer.send(new ProducerRecord<>(saveRecipeEventTopic, null, UUID.randomUUID().toString(), jsonMessage, headers)).get();
-
         await().atMost(Duration.ofSeconds(10)).pollInterval(Duration.ofSeconds(1)).untilAsserted(() -> {
             log.info("Waiting for consumer to receive the message and process...");
 
-            final List<RecipeDTO> recipes = getRecipeUseCase.getAll(PageRequest.of(0, 10));
+            final var recipes = getRecipeUseCase.getAll(PageRequest.of(0, 10));
             assertFalse(recipes.isEmpty());
-
-            //final List<IngredientDTO> registeredIngredients = ingredientService.getAll(recipes.get(0).id);
-            //assertNotNull(registeredIngredients);
         });
     }
 
