@@ -1,12 +1,10 @@
 package br.com.amarques.smartcookbook.it;
 
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-
+import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
+import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
+import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,17 +14,17 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
-import br.com.amarques.smartcookbook.dto.message.CreateRecipeMessageDTO;
-import br.com.amarques.smartcookbook.dto.rest.RecipeDTO;
-import br.com.amarques.smartcookbook.usecase.recipe.GetRecipeUseCase;
-import lombok.extern.slf4j.Slf4j;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Slf4j
 class CreateRecipeIT extends BaseIT {
 
-    @Value("${spring.cloud.stream.bindings.saveRecipeEvent-in-0.destination}")
+    @Value("${spring.cloud.stream.bindings.createRecipeEvent-in-0.destination}")
     private String saveRecipeEventTopic;
 
     @Autowired

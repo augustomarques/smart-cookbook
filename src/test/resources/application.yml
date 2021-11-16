@@ -48,10 +48,14 @@ spring:
                         key:
                             serializer: org.apache.kafka.common.serialization.StringSerializer
                 bindings:
-                    createReceitaEvent-in-0:
+                    createRecipeEvent-in-0:
+                        consumer:
+                            enableDlq: false
+                            autoCommitOnError: true
+                            autoCommitOffset: true
 
             bindings:
-                saveReceitaEvent-in-0:
+                createRecipeEvent-in-0:
                     destination: smartcookbook-create-recipe-event
                     group: smartcookbook
                     contentType: application/json
