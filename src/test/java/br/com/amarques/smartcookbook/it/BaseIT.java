@@ -1,13 +1,10 @@
 package br.com.amarques.smartcookbook.it;
 
-import java.util.UUID;
-
+import br.com.amarques.smartcookbook.SmartCookbookApplication;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -23,9 +20,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 import org.testcontainers.utility.DockerImageName;
 
-import br.com.amarques.smartcookbook.SmartCookbookApplication;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Testcontainers
 @ActiveProfiles("integration-test")
@@ -37,19 +31,19 @@ public abstract class BaseIT {
     private static final boolean REUSE_CONTAINER = true;
 
     @Container
-    static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:6.1.1"));
+    static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.0.0"));
 
     @Container
-    static final GenericContainer<?> zookeeper = new GenericContainer<>("confluentinc/cp-zookeeper:6.1.1");
+    static final GenericContainer<?> zookeeper = new GenericContainer<>("confluentinc/cp-zookeeper:7.0.0");
 
     @Container
-    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.22");
+    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.23");
 
-    public static KafkaProducer<String, String> producer;
+    //    public static KafkaProducer<String, String> producer;
     public static KafkaConsumer<String, String> consumer;
 
     static {
-        Network network = Network.SHARED;
+        final var network = Network.SHARED;
 
         zookeeper
                 .withNetwork(network)
@@ -75,13 +69,13 @@ public abstract class BaseIT {
     }
 
     @DynamicPropertySource
-    public static void dynamicProperties(DynamicPropertyRegistry registry) {
-        producer = new KafkaProducer<>(
-                ImmutableMap.of(
-                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString()),
-                new StringSerializer(),
-                new StringSerializer());
+    static void dynamicProperties(final DynamicPropertyRegistry registry) {
+//        producer = new KafkaProducer<>(
+//                ImmutableMap.of(
+//                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
+//                        ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString()),
+//                new StringSerializer(),
+//                new StringSerializer());
 
         consumer = new KafkaConsumer<>(
                 ImmutableMap.of(
@@ -91,7 +85,7 @@ public abstract class BaseIT {
                 new StringDeserializer(),
                 new StringDeserializer());
 
-        log.info(">>> Overriding Spring Properties for Kafka <<<" + kafka.getBootstrapServers());
+        log.info(">>> Overriding Spring Properties for Kafka <<< " + kafka.getBootstrapServers());
 
         registry.add("spring.cloud.stream.kafka.binder.brokers", kafka::getBootstrapServers);
 
