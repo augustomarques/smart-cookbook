@@ -1,4 +1,4 @@
-package br.com.amarques.smartcookbook.repository.testcontainer;
+package br.com.amarques.smartcookbook.it.repository;
 
 import br.com.amarques.smartcookbook.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -10,7 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class RecipeRepositoryTest extends TestcontainerRepositoryTestIT {
+class RecipeRepositoryIT extends TestcontainerRepositoryTestIT {
 
     @Autowired
     private RecipeRepository recipeRepository;

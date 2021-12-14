@@ -1,8 +1,7 @@
-package br.com.amarques.smartcookbook.repository.embedded;
+package br.com.amarques.smartcookbook.repository;
 
 import br.com.amarques.smartcookbook.domain.Ingredient;
 import br.com.amarques.smartcookbook.domain.Recipe;
-import br.com.amarques.smartcookbook.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
