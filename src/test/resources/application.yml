@@ -1,75 +1,75 @@
 spring:
-    profiles:
-        active: test
-    h2:
-        console:
-            enabled: false
-    jackson:
-        default-property-inclusion: NON_NULL
-        property-naming-strategy: SNAKE_CASE
-    jpa:
-        open-in-view: false
-        hibernate:
-            use-new-id-generator-mappings: false
-            ddl-auto: validate
+  profiles:
+    active: test
+  h2:
+    console:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL
+    property-naming-strategy: SNAKE_CASE
+  jpa:
+    open-in-view: false
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: create
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: test
-    datasource:
-        url: jdbc:h2:mem:db;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
-        username: sa
-        password: 1234
-    jpa:
-        database: H2
-        show-sql: true
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:db;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 1234
+  jpa:
+    database: H2
+    show-sql: true
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: integration-test
-    jpa:
-        show-sql: true
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    configuration:
-                        retries: 3
-                    autoAddPartitions: true
-                    replication-factor: 1
-                    autoCreateTopics: true
-                    producer-properties:
-                        key:
-                            serializer: org.apache.kafka.common.serialization.StringSerializer
-                bindings:
-                    createRecipeEvent-in-0:
-                        consumer:
-                            enableDlq: false
-                            autoCommitOnError: true
-                            autoCommitOffset: true
+  config:
+    activate:
+      on-profile: integration-test
+  jpa:
+    show-sql: true
+  cloud:
+    stream:
+      kafka:
+        binder:
+          configuration:
+            retries: 3
+          autoAddPartitions: true
+          replication-factor: 1
+          autoCreateTopics: true
+          producer-properties:
+            key:
+              serializer: org.apache.kafka.common.serialization.StringSerializer
+        bindings:
+          createRecipeEvent-in-0:
+            consumer:
+              enableDlq: false
+              autoCommitOnError: true
+              autoCommitOffset: true
 
-            bindings:
-                createRecipeEvent-in-0:
-                    destination: smartcookbook-create-recipe-event
-                    group: smartcookbook
-                    contentType: application/json
-                    consumer:
-                        maxAttempts: 3
-                        concurrency: 3
+      bindings:
+        createRecipeEvent-in-0:
+          destination: smartcookbook-create-recipe-event
+          group: smartcookbook
+          contentType: application/json
+          consumer:
+            maxAttempts: 3
+            concurrency: 3
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: testcontainer
-    datasource:
-        url: jdbc:tc:mysql:5.7.34://db:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
-    jpa:
-        show-sql: true
+  config:
+    activate:
+      on-profile: testcontainer
+  datasource:
+    url: jdbc:tc:mysql:8.0.29://db:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+  jpa:
+    show-sql: true

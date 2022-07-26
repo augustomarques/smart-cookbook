@@ -1,99 +1,104 @@
 server:
-    port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8080}
 spring:
-    application:
-        name: smart-cookbook
-    profiles:
-        active: dev
-    h2:
-        console:
-            enabled: false
-    jackson:
-        default-property-inclusion: NON_NULL
-        property-naming-strategy: SNAKE_CASE
-    jpa:
-        open-in-view: false
-        hibernate:
-            use-new-id-generator-mappings: false
-            ddl-auto: validate
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    configuration:
-                        retries: 3
-                    brokers: localhost:29092
-                    autoAddPartitions: true
-                    replication-factor: 1
-                    autoCreateTopics: true
-                    producer-properties:
-                        key:
-                            serializer: org.apache.kafka.common.serialization.StringSerializer
-                bindings:
-                    createRecipeEvent-in-0:
-                        consumer:
-                            enableDlq: false
-                            autoCommitOnError: true
-                            autoCommitOffset: true
-            bindings:
-                createRecipeEvent-in-0:
-                    destination: smartcookbook-create-recipe-event
-                    group: smartcookbook
-                    contentType: application/json
-                    consumer:
-                        maxAttempts: 3
-                        concurrency: 3
+  application:
+    name: smart-cookbook
+  profiles:
+    active: dev
+  h2:
+    console:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL
+    property-naming-strategy: SNAKE_CASE
+  jpa:
+    open-in-view: false
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: validate
+  cloud:
+    stream:
+      kafka:
+        binder:
+          configuration:
+            retries: 3
+          brokers: localhost:29092
+          autoAddPartitions: true
+          replication-factor: 1
+          autoCreateTopics: true
+          producer-properties:
+            key:
+              serializer: org.apache.kafka.common.serialization.StringSerializer
+        bindings:
+          createRecipeEvent-in-0:
+            consumer:
+              enableDlq: false
+              autoCommitOnError: true
+              autoCommitOffset: true
+      bindings:
+        createRecipeEvent-in-0:
+          destination: smartcookbook-create-recipe-event
+          group: smartcookbook
+          contentType: application/json
+          consumer:
+            maxAttempts: 3
+            concurrency: 3
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: dev
-    devtools:
-        restart:
-            enabled: true
-        livereload:
-            enabled: true
-    datasource:
-        url: jdbc:mysql://localhost:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
-        username: root
-        password: password
-    jpa:
-        show-sql: true
+  config:
+    activate:
+      on-profile: dev
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username: root
+    password: password
+  jpa:
+    show-sql: true
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: docker
-    devtools:
-        restart:
-            enabled: false
-        livereload:
-            enabled: false
-    datasource:
-        url: jdbc:mysql://db:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
-        username: root
-        password: docker
-    jpa:
-        show-sql: false
+  config:
+    activate:
+      on-profile: docker
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka:29092
+  datasource:
+    url: jdbc:mysql://db:3306/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username: user-docker
+    password: docker
+  jpa:
+    show-sql: false
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: prod
-    devtools:
-        restart:
-            enabled: false
-        livereload:
-            enabled: false
-    datasource:
-        url: jdbc:mysql://${MYSQL_DB_URL}:${MYSQL_DB_PORT}/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
-        username: ${MYSQL_DB_USERNAME}
-        password: ${MYSQL_DB_PASSWORD}
-    jpa:
-        show-sql: false
+  config:
+    activate:
+      on-profile: prod
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  datasource:
+    url: jdbc:mysql://${MYSQL_DB_URL}:${MYSQL_DB_PORT}/smartcookbook?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT-3
+    username: ${MYSQL_DB_USERNAME}
+    password: ${MYSQL_DB_PASSWORD}
+  jpa:
+    show-sql: false

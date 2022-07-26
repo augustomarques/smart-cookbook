@@ -37,7 +37,7 @@ public abstract class BaseIT {
     static final GenericContainer<?> zookeeper = new GenericContainer<>("confluentinc/cp-zookeeper:7.0.0");
 
     @Container
-    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.23");
+    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.29");
 
     //    public static KafkaProducer<String, String> producer;
     public static KafkaConsumer<String, String> consumer;
