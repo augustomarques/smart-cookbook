@@ -22,7 +22,7 @@ spring:
         binder:
           configuration:
             retries: 3
-          brokers: localhost:29092
+          brokers: localhost:9092
           autoAddPartitions: true
           replication-factor: 1
           autoCreateTopics: true
