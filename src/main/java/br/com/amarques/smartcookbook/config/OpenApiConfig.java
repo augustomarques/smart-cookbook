@@ -1,13 +1,11 @@
 package br.com.amarques.smartcookbook.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
@@ -15,13 +13,13 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenApi() {
         return new OpenAPI().info(new Info()
-                .title("Receitas Inteligentes - Rest APIs")
-                .version("Esta página lista todos os serviços REST da API de Receitas Inteligentes")
+                .title("Smart Cookbook - Rest APIs")
+                .version("This page lists all API REST services")
                 .description("1.0.0"));
     }
 
     /**
-     * Necessário para que o OpenAPI respeite o snake_case
+     * Required for snake_case with OpenAPI (Swagger)
      */
     @Bean
     public ModelResolver modelResolver(final ObjectMapper objectMapper) {
