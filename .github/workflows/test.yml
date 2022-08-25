@@ -1,7 +1,10 @@
 name: Test
 
 on:
-  workflow_call:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
 
 jobs:
   unit-test:
@@ -38,3 +41,8 @@ jobs:
       
     - name: Integration Test
       run: mvn failsafe:integration-test 
+
+  docker:
+    needs: integration-test
+    uses: ./.github/workflows/docker.yml
+    secrets: inherit
