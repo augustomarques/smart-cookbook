@@ -40,7 +40,7 @@ jobs:
         cache: maven
       
     - name: Integration Test
-      run: mvn failsafe:integration-test 
+      run: mvn clean install -DskipUnitTests
 
   docker:
     needs: integration-test
