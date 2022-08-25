@@ -1,6 +1,5 @@
-version: '3.8'
+version: "3.8"
 services:
-
   db:
     image: mysql:8.0.29
     container_name: mysql
@@ -44,7 +43,7 @@ services:
       - smartcookbook-network
 
   api-smartcookbook:
-    image: augustomarques/smartcookbook
+    image: augustomarques/smart-cookbook
     container_name: smart-cookbook
     build: .
     restart: always
