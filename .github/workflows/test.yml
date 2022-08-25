@@ -7,22 +7,37 @@ on:
     branches: [ "*" ]
 
 jobs:
-  build:
+  unit-test:
 
     runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v3
     
-    - name: Set up JDK
+    - name: Set up Java JDK
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
+  
     - name: Unit Test
       run: mvn test
+  
+  integration-test:
+    needs: unit-test
+    
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Java JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
       
     - name: Integration Test
       run: mvn failsafe:integration-test 
